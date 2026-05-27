@@ -5,6 +5,8 @@ import { GoSearch } from "react-icons/go";
 import Chatsidebar from "../chatsidebar/Chatsidebar";
 import { Outlet } from "react-router-dom";
 
+import Contentchat from "../contentChat/Contentchat";
+import Startmessage from "../contentChat/Startmessage";
 const Maindashboard = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
@@ -48,12 +50,10 @@ const Maindashboard = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex-1 ">
-          <div className="flex justify-center items-center h-screen">
-            <p className=" font-bold text-gray-700 text-5xl">
-              Start Converation
-            </p>
-          </div>
+
+        <div className=" flex-1">
+          <Startmessage/>
+          {/* <Contentchat /> */}
         </div>
       </div>
     </div>

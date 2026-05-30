@@ -1,13 +1,27 @@
+
 import { createContext, useContext, useState } from "react";
+import { io } from "socket.io-client";
 
 const ChatContext = createContext();
-
 
 export const Chatprovider = ({ children }) => {
   const [Email, setEmail] = useState("");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
-   const [isauth,setIsauth]=useState(false)
+  const [isauth, setIsauth] = useState(false);
+  const [socket,setSocket]=useState(null)
+
+  const connectSocket = () => {
+    
+    if(socket)return
+    const newSocket = io(import.meta.env.VITE_API_URL);
+    newSocket.on("connect",()=>{
+      console.log("user connected",newSocket.id);
+      
+    })
+
+    setSocket(newSocket)
+  };
   return (
     <ChatContext.Provider
       value={{
@@ -18,7 +32,9 @@ export const Chatprovider = ({ children }) => {
         Password,
         setPassword,
         isauth,
-        setIsauth
+        setIsauth,
+        connectSocket,
+        socket
       }}
     >
       {children}
@@ -26,4 +42,4 @@ export const Chatprovider = ({ children }) => {
   );
 };
 
-export const chatprovide=()=>useContext(ChatContext)
+export const chatprovide = () => useContext(ChatContext);

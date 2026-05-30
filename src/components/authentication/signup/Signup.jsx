@@ -9,7 +9,7 @@ const Signup = ({ todashboard }) => {
   // const [Username, setUsername] = useState("");
   // const [Password, setPassword] = useState("");
 
-  const { Email, setEmail, Username, setUsername, Password, setPassword } =chatprovide();
+  const { Email, setEmail, Username, setUsername, Password, setPassword,connectSocket } =chatprovide();
 
   const emailonchange = (e) => {
     setEmail(e.target.value);
@@ -32,8 +32,11 @@ const Signup = ({ todashboard }) => {
         Username,
         Password,
       });
-      alert("Signup success ✅");
+      
       todashboard(true);
+      connectSocket()
+      alert("Signup success ✅");
+      
     } catch (error) {
        const msg = error.response?.data?.message;
 

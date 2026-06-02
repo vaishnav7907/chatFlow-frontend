@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom";
 
 import Contentchat from "../contentChat/Contentchat";
 import Startmessage from "../contentChat/Startmessage";
+import ChatArea from "../contentChat/ChatArea";
 const Maindashboard = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
@@ -52,7 +53,7 @@ const Maindashboard = () => {
         {/* RIGHT SIDE */}
 
         <div className=" flex-1">
-          <Startmessage/>
+          <ChatArea/>
           {/* <Contentchat /> */}
         </div>
       </div>

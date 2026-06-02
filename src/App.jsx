@@ -11,11 +11,14 @@ import Allchats from "./components/dashboard/dashboardpages/allchats/Allchats";
 import Groupchats from "./components/dashboard/dashboardpages/groups/Groupchats";
 import Contactchat from "./components/dashboard/dashboardpages/contacts/Contactchat";
 import { Chatprovider } from "./components/context/Chatprovider";
+import Contentchat from "./components/dashboard/contentChat/Contentchat";
+import ChatArea from "./components/dashboard/contentChat/ChatArea";
+import Startmessage from "./components/dashboard/contentChat/Startmessage";
 
 function App() {
   const [count, setCount] = useState(0);
 
-  const [isauth,setIsauth]=useState(false)
+  const [isauth, setIsauth] = useState(false);
 
   return (
     <div>
@@ -23,21 +26,29 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Welcomepage />} />
-            <Route path="/authentication" element={ !isauth? <Authpage />: <Navigate to={"/dashboard"}/> }>
-              <Route index element={<Signin tohome={setIsauth}/>}  />
-              <Route path="signup" element={<Signup  todashboard={setIsauth}/>} />
+            <Route
+              path="/authentication"
+              element={!isauth ? <Authpage /> : <Navigate to={"/dashboard"} />}
+            >
+              <Route index element={<Signin tohome={setIsauth} />} />
+              <Route
+                path="signup"
+                element={<Signup todashboard={setIsauth} />}
+              />
             </Route>
-            <Route path="/dashboard" element={isauth? <Maindashboard />: <Navigate to={"/authentication"} />  }>
+            <Route
+              path="/dashboard"
+              element={
+                isauth ? <Maindashboard /> : <Navigate to={"/authentication"} />
+              }
+            >
               <Route index element={<Allchats />} />
               <Route path="groupchat" element={<Groupchats />} />
               <Route path="contactchats" element={<Contactchat />} />
             </Route>
             <Route path="/chatbar" element={<Chatsidebar />} />
-            {/* <Route path="/chatbar" element={<Chatsidebar />}>
-            <Route index element={<Allchats />} />
-            <Route path="groupchat" element={<Groupchats />} />
-            <Route path="contactchats" element={<Contactchat />} />
-          </Route> */}
+
+           
           </Routes>
         </BrowserRouter>
       </Chatprovider>

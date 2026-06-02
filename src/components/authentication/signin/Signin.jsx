@@ -35,7 +35,9 @@ const Signin = ({ tohome }) => {
 
       if (signinapi.data.token) {
         localStorage.setItem("token", signinapi.data.token);
-         connectSocket()
+
+        const userId=signinapi.data.user._id
+         connectSocket(userId)
         tohome(true);
         navigation("/dashboard");
         alert("SignIn success ✅");

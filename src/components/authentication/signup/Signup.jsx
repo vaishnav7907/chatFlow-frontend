@@ -43,7 +43,7 @@ const Signup = ({ todashboard }) => {
       if (error.response?.status === 409) {
         alert("Email already exists ❌");
       } else if (msg) {
-        alert(msg); // ✅ shows real error (invalid email/password)
+        alert(msg); 
       }
       
     }

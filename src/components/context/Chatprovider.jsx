@@ -14,11 +14,19 @@ export const Chatprovider = ({ children }) => {
    const [messagesend,setMessagesend]=useState(null)
    const[messagesubmit,setMessagesubmit]=useState("")
    
-  const connectSocket = () => {
+  const connectSocket = (userId) => {
     if (socket) return;
     const newSocket = io(import.meta.env.VITE_API_URL);
     newSocket.on("connect", () => {
       console.log("user connected", newSocket.id);
+
+      newSocket.emit("join_room",userId)
+
+
+      newSocket.emit("send_message",{
+        recieverid:selecteduser._id,
+        text:messagesubmit
+      })
     });
 
     setSocket(newSocket);

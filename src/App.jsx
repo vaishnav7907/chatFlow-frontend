@@ -36,6 +36,10 @@ function App() {
                 element={<Signup todashboard={setIsauth} />}
               />
             </Route>
+
+
+
+
             <Route
               path="/dashboard"
               element={
@@ -45,7 +49,17 @@ function App() {
               <Route index element={<Allchats />} />
               <Route path="groupchat" element={<Groupchats />} />
               <Route path="contactchats" element={<Contactchat />} />
+              
             </Route>
+
+
+
+
+
+
+
+
+
             <Route path="/chatbar" element={<Chatsidebar />} />
 
            

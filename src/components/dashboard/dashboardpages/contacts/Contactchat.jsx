@@ -12,7 +12,9 @@ const navigatee= useNavigate()
   const token = localStorage.getItem("token");
   
   console.log("token:",token);
-  const [allusers, setAllusers] = useState([]);
+  
+const {allusers, setAllusers,setGotochat,setSelecteduser}=chatprovide()
+
 
   const getallusers = async () => {
     try {
@@ -35,7 +37,7 @@ const navigatee= useNavigate()
   };
 
 
-  const {setGotochat}=chatprovide()
+  
   
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const navigatee= useNavigate()
   return (
     <div className=" w-full   flex flex-col gap-2">
       {allusers.map((user) => (
-        <div className="flex items-center p-2  rounded-2xl gap-4 group bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-[#6938EF] hover:bg-[#1a2440] transition-all duration-300 cursor-pointer" key={user._id}  onClick={()=>setGotochat(user)}>
+        <div className="flex items-center p-2  rounded-2xl gap-4 group bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-[#6938EF] hover:bg-[#1a2440] transition-all duration-300 cursor-pointer" key={user._id}  onClick={()=>{setGotochat(user) ;setSelecteduser(user);}}>
           {/* Avatar */}
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">

@@ -33,10 +33,15 @@ const Signin = ({ tohome }) => {
         },
       );
 
+      console.log("userid:",signinapi.data.user.id);
+      
+
       if (signinapi.data.token) {
         localStorage.setItem("token", signinapi.data.token);
 
-        const userId=signinapi.data.user._id
+        const userId=signinapi.data.user.id
+        
+        
          connectSocket(userId)
         tohome(true);
         navigation("/dashboard");

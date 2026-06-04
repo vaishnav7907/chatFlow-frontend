@@ -11,7 +11,7 @@ export const Chatprovider = ({ children }) => {
   const [isauth, setIsauth] = useState(false);
   const [socket, setSocket] = useState(null);
   const [gotochat, setGotochat] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState([]);
   const [messagesend, setMessagesend] = useState(null);
   const [messagesubmit, setMessagesubmit] = useState("");
   const [selecteduser, setSelecteduser] = useState(null);
@@ -35,30 +35,31 @@ export const Chatprovider = ({ children }) => {
   };
 
   const sendmessages = () => {
-    if(!socket){
+    if (!socket) {
       console.log("socket is not connected");
-      return
-      
+      return;
     }
-    if(!selecteduser){
+    if (!selecteduser) {
       console.log("no users selected");
-      return
-      
+      return;
     }
 
-    if(!messagesubmit.trim()){
+    if (!messagesubmit.trim()) {
       console.log("message is empty");
-      return
+      return;
     }
 
-    const messagedata={
-      receiverid:selecteduser._id,
-      text:messagesubmit
-    }
+    const messagedata = {
+      receiverid: selecteduser._id,
+      text: messagesubmit,
+    };
 
-    socket.emit("send_message",messagedata)
-    setMessage((prev)=>[...prev,messagedata])
-     setMessagesubmit("");
+    socket.emit("send_message", messagedata);
+    setMessage((prev) => [...prev, messagedata]);
+    setMessagesubmit("");
+
+    console.log("messagedata:",selecteduser._id);
+    
   };
   return (
     <ChatContext.Provider
@@ -84,6 +85,7 @@ export const Chatprovider = ({ children }) => {
         allusers,
         setAllusers,
         setSelecteduser,
+        sendmessages
       }}
     >
       {children}

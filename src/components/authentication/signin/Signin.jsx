@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const Signin = ({ tohome }) => {
   const navigation = useNavigate();
+const context=chatprovide()
+console.log("context",context);
 
   const { Email, setEmail, Password, setPassword,connectSocket } = chatprovide();
 
@@ -33,7 +35,7 @@ const Signin = ({ tohome }) => {
         },
       );
 
-      console.log("userid:",signinapi.data.user.id);
+      console.log("useridss:",signinapi.data);
       
 
       if (signinapi.data.token) {

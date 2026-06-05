@@ -52,7 +52,7 @@ const Maindashboard = () => {
 
         {/* RIGHT SIDE */}
 
-        <div className=" flex-1">
+        <div className=" flex-1 w-full">
           <ChatArea/>
           {/* <Contentchat /> */}
         </div>

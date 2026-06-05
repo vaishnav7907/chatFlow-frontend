@@ -8,28 +8,30 @@ const Contentchat = () => {
     gotochat,
     message,
     setMessage,
+    messagesubmit,
+    setMessagesubmit,
+    sendmessages,
   } = chatprovide();
 
+  console.log("messages:", message);
+
   const messageinput = (e) => {
-    setMessage(e.target.value);
+    setMessagesubmit(e.target.value);
   };
 
   const submitMessage = (e) => {
     e.preventDefault();
 
-    if (!message.trim()) return;
+    if (!messagesubmit.trim()) return;
+    sendmessages();
+    console.log("Message:", messagesubmit);
 
-    console.log("Message:", message);
-
-    
-
-    setMessage("");
+    setMessagesubmit("");
   };
 
   return (
     <div className="flex flex-col h-screen">
-     
-      <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-xl shadow-sm">
+      <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-xl shadow-sm ">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6938EF] via-[#7C3AED] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
             {gotochat?.Username?.charAt(0)?.toUpperCase() || "U"}
@@ -51,18 +53,31 @@ const Contentchat = () => {
           <BsThreeDotsVertical className="text-slate-300 text-lg" />
         </button>
       </div>
+      <div className="h-full overflow-y-auto p-4 flex flex-col gap-3 bg-gray-900">
+        {message.map((showmessages, index) => (
+          <div
+            key={index}
+            className={`flex ${
+              showmessages.sender === showmessages.senderid ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`max-w-[70%] px-4 py-2 rounded-2xl shadow-lg break-words ${
+                showmessages.sender === showmessages.senderid 
+                  ? "bg-blue-600 text-white rounded-br-md"
+                  : "bg-gray-700 text-white rounded-bl-md"
+              }`}
+            >
+              <p className="text-sm">{showmessages.text}</p>
 
-      
-      <div className="flex-1 overflow-y-auto p-4">
-       
-        {message && (
-          <div className="bg-blue-500 text-white p-3 rounded-lg w-fit">
-            {message}
+              <p className="text-[10px] text-gray-300 mt-1 text-right">
+                {showmessages.time}
+              </p>
+            </div>
           </div>
-        )}
+        ))}
       </div>
 
-     
       <form
         onSubmit={submitMessage}
         className="p-4 border-t border-slate-700/50 flex items-center gap-3"
@@ -71,7 +86,7 @@ const Contentchat = () => {
           type="text"
           placeholder="Type a message..."
           className="flex-1 p-3 rounded-lg bg-slate-800 text-white outline-none border border-slate-600"
-          value={message}
+          value={messagesubmit}
           onChange={messageinput}
         />
 

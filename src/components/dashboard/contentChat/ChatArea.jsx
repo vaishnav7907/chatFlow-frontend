@@ -7,7 +7,7 @@ import { chatprovide } from "../../context/Chatprovider";
 const ChatArea = () => {
   const { gotochat } = chatprovide();
   return (
-    <div className="h-screen ">
+    <div className="h-screen  ">
       {gotochat ? <Contentchat /> : <Startmessage />}
     </div>
   );

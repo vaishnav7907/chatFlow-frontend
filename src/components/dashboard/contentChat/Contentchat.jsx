@@ -5,41 +5,51 @@ import { chatprovide } from "../../context/Chatprovider";
 
 const Contentchat = () => {
   const {
-    gotochat,
+    selecteduser,
     message,
-    setMessage,
     messagesubmit,
     setMessagesubmit,
-    sendmessages,
+    sendmessage,
+    currentuserid,
   } = chatprovide();
 
-  console.log("messages:", message);
+// console.log("message:");
+
+
+  const submitMessage = (e) => {
+    e.preventDefault();
+    sendmessage();
+  };
 
   const messageinput = (e) => {
     setMessagesubmit(e.target.value);
   };
 
-  const submitMessage = (e) => {
-    e.preventDefault();
+  console.log("CURRENT USER:", currentuserid);
+  console.log("SELECTED USER:", selecteduser);
+  console.log("ALL MESSAGES:", message);
 
-    if (!messagesubmit.trim()) return;
-    sendmessages();
-    console.log("Message:", messagesubmit);
-
-    setMessagesubmit("");
-  };
-
+  const chatToRightperson = message.filter(
+    (msg) =>
+      (String(msg.senderid) === String(currentuserid) &&
+        String(msg.recieverid) === String(selecteduser?._id)) ||
+      (String(msg.senderid) === String(selecteduser?._id) &&
+        String(msg.recieverid) === String(currentuserid)),
+  );
+  console.log("FILTERED:", chatToRightperson);
+  console.log("RENDER COUNT:", chatToRightperson.length);
   return (
     <div className="flex flex-col h-screen">
-      <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-xl shadow-sm ">
+      {/* Header */}
+      <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6938EF] via-[#7C3AED] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
-            {gotochat?.Username?.charAt(0)?.toUpperCase() || "U"}
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
+            {selecteduser?.Username?.charAt(0)?.toUpperCase() || "U"}
           </div>
 
           <div>
-            <h3 className="text-white font-semibold text-lg tracking-wide">
-              {gotochat?.Username}
+            <h3 className="text-white font-semibold text-lg">
+              {selecteduser?.Username || "Select User"}
             </h3>
 
             <div className="flex items-center gap-2">
@@ -49,21 +59,25 @@ const Contentchat = () => {
           </div>
         </div>
 
-        <button className="w-10 h-10 rounded-xl hover:bg-slate-800 transition-all duration-300 flex items-center justify-center">
+        <button className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center">
           <BsThreeDotsVertical className="text-slate-300 text-lg" />
         </button>
       </div>
-      <div className="h-full overflow-y-auto p-4 flex flex-col gap-3 bg-gray-900">
-        {message.map((showmessages, index) => (
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 bg-gray-900">
+        {chatToRightperson.map((showmessages, index) => (
           <div
             key={index}
             className={`flex ${
-              showmessages.sender === showmessages.senderid ? "justify-end" : "justify-start"
+              String(showmessages.senderid) === String(currentuserid)
+                ? "justify-end"
+                : "justify-start"
             }`}
           >
             <div
               className={`max-w-[70%] px-4 py-2 rounded-2xl shadow-lg break-words ${
-                showmessages.sender === showmessages.senderid 
+                String(showmessages.senderid) === String(currentuserid)
                   ? "bg-blue-600 text-white rounded-br-md"
                   : "bg-gray-700 text-white rounded-bl-md"
               }`}
@@ -71,13 +85,14 @@ const Contentchat = () => {
               <p className="text-sm">{showmessages.text}</p>
 
               <p className="text-[10px] text-gray-300 mt-1 text-right">
-                {showmessages.time}
+                {showmessages.time || ""}
               </p>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Input */}
       <form
         onSubmit={submitMessage}
         className="p-4 border-t border-slate-700/50 flex items-center gap-3"

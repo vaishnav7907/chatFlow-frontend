@@ -5,10 +5,13 @@ import { Outlet } from "react-router-dom";
 import { chatprovide } from "../../context/Chatprovider";
 
 const ChatArea = () => {
-  const { gotochat } = chatprovide();
+  const { selecteduser } = chatprovide();
+
+  console.log("chat area user :", selecteduser);
+  
   return (
     <div className="h-screen  ">
-      {gotochat ? <Contentchat /> : <Startmessage />}
+      {selecteduser ? <Contentchat /> : <Startmessage />}
     </div>
   );
 };

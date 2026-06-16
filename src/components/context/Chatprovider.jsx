@@ -1,5 +1,4 @@
-import { createContext, useContext, useState } from "react";
-import { data } from "react-router-dom";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
 const ChatContext = createContext();
@@ -8,59 +7,53 @@ export const Chatprovider = ({ children }) => {
   const [Email, setEmail] = useState("");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
+
   const [isauth, setIsauth] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [gotochat, setGotochat] = useState(false);
+
   const [message, setMessage] = useState([]);
-  const [messagesend, setMessagesend] = useState(null);
   const [messagesubmit, setMessagesubmit] = useState("");
-  const [selecteduser, setSelecteduser] = useState(null);
+
   const [allusers, setAllusers] = useState([]);
-  const connectSocket = (userId) => {
-    if (socket) return;
-    const newSocket = io(import.meta.env.VITE_API_URL);
-    newSocket.on("connect", () => {
-      console.log("user connected", newSocket.id);
+  const [socket, setSocket] = useState(null);
 
-      newSocket.emit("join_room", userId);
-    });
+  const currentuserid = localStorage.getItem("userId");
+  const [selecteduser, setSelecteduser] = useState(null);
 
-    //incoming messags
-    newSocket.on("recieve_message", (data) => {
-      console.log("message recieved:", data);
-      setMessage((prev) => [...prev, data]);
-    });
-
+  useEffect(() => {
+    const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
-  };
+    return () => newSocket.disconnect();
+  }, []);
 
-  const sendmessages = () => {
-    if (!socket) {
-      console.log("socket is not connected");
-      return;
-    }
-    if (!selecteduser) {
-      console.log("no users selected");
-      return;
-    }
+  useEffect(() => {
+    if (!socket || !currentuserid) return;
+    socket.emit("join", currentuserid);
+  }, [socket, currentuserid]);
 
-    if (!messagesubmit.trim()) {
-      console.log("message is empty");
-      return;
-    }
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("recievemessage", (newMsg) => {
+      console.log("NEW MESSAGE:", newMsg);
+      setMessage((prev) => [...prev, newMsg]);
+    });
 
-    const messagedata = {
-      receiverid: selecteduser._id,
-      text: messagesubmit,
+    return () => {
+      socket.off("recievemessage");
     };
+  }, [socket]);
 
-    socket.emit("send_message", messagedata);
-    setMessage((prev) => [...prev, messagedata]);
-    setMessagesubmit("");
+  const sendmessage = () => {
+    if (!messagesubmit.trim() || !selecteduser) return;
 
-    console.log("messagedata:",selecteduser._id);
-    
+    socket.emit("sendmessage", {
+      senderid:currentuserid,
+      recieverid:selecteduser._id,
+      text:messagesubmit,
+    });
+
+    setMessagesubmit("")
   };
+
   return (
     <ChatContext.Provider
       value={{
@@ -70,22 +63,25 @@ export const Chatprovider = ({ children }) => {
         setUsername,
         Password,
         setPassword,
+
         isauth,
         setIsauth,
-        connectSocket,
-        socket,
-        gotochat,
-        setGotochat,
+
         message,
         setMessage,
-        messagesend,
-        setMessagesend,
+
         messagesubmit,
         setMessagesubmit,
+
+        selecteduser,
+        setSelecteduser,
+
         allusers,
         setAllusers,
-        setSelecteduser,
-        sendmessages
+
+        sendmessage,
+
+        currentuserid,
       }}
     >
       {children}

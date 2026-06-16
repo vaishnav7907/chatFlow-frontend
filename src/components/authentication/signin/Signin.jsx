@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const Signin = ({ tohome }) => {
   const navigation = useNavigate();
-const context=chatprovide()
-console.log("context",context);
+  //const context=chatprovide()
+  //console.log("context",context);
 
-  const { Email, setEmail, Password, setPassword,connectSocket } = chatprovide();
+  const { Email, setEmail, Password, setPassword } = chatprovide();
 
   const emailonchange = (e) => {
     setEmail(e.target.value);
@@ -35,23 +35,23 @@ console.log("context",context);
         },
       );
 
-      console.log("useridss:",signinapi.data);
-      
+      console.log("useridss:", signinapi.data);
 
       if (signinapi.data.token) {
         localStorage.setItem("token", signinapi.data.token);
 
-        const userId=signinapi.data.user.id
-        
-        
-         connectSocket(userId)
+        const userId = signinapi.data.user.id;
+        console.log("USER ID SAVED:", userId);
+        localStorage.setItem("userId", userId);
+
+        console.log("USER FROM API:", signinapi.data.user);
+
+        console.log("LOCAL SAVED ID:", localStorage.getItem("userId"));
+
         tohome(true);
         navigation("/dashboard");
         alert("SignIn success ✅");
       }
-
-
-     
     } catch (error) {
       console.log("login error:", error);
       alert("Invalid email or password");

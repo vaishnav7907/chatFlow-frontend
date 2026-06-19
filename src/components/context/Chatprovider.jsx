@@ -19,6 +19,11 @@ export const Chatprovider = ({ children }) => {
   const currentuserid = localStorage.getItem("userId");
   const [selecteduser, setSelecteduser] = useState(null);
 
+  //group
+  const [editgroup, setEditgroup] = useState(false);
+
+  const [creategroup, setCreategroup]=useState()
+
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
@@ -46,12 +51,12 @@ export const Chatprovider = ({ children }) => {
     if (!messagesubmit.trim() || !selecteduser) return;
 
     socket.emit("sendmessage", {
-      senderid:currentuserid,
-      recieverid:selecteduser._id,
-      text:messagesubmit,
+      senderid: currentuserid,
+      recieverid: selecteduser._id,
+      text: messagesubmit,
     });
 
-    setMessagesubmit("")
+    setMessagesubmit("");
   };
 
   return (
@@ -59,8 +64,10 @@ export const Chatprovider = ({ children }) => {
       value={{
         Email,
         setEmail,
+
         Username,
         setUsername,
+
         Password,
         setPassword,
 
@@ -82,6 +89,12 @@ export const Chatprovider = ({ children }) => {
         sendmessage,
 
         currentuserid,
+
+        editgroup,
+        setEditgroup,
+
+        creategroup,
+        setCreategroup,
       }}
     >
       {children}

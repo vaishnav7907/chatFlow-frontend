@@ -39,12 +39,13 @@ const Maindashboard = () => {
             </div>
           </div>
           <div></div>
-          <div>
-            <div className="pb-4 pt-2">
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="pb-4 pt-2 ">
               <Chatsidebar />
             </div>
             {/* CHAT CONTENT */}
-            <div className=" pt-4 overflow-y-auto border-t border-slate-700/50">
+            
+            <div className="flex-1 min-h-0 pt-4 overflow-y-auto border-t border-slate-700/50 scrollbar-none">
               <Outlet />
             </div>
           </div>

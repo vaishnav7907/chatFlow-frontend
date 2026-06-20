@@ -4,9 +4,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { chatprovide } from "../../../context/Chatprovider";
 import axios from "axios";
 const Groupchats = () => {
-  const { setEditgroup } = chatprovide();
-
-  const [getallgroups, setGetallgroups] = useState([]);
+  const {
+    setEditgroup,
+    setGroupcontent,
+    getallgroups,
+    setGetallgroups,
+    setSelectedGroup,
+    setSelecteduser,
+  } = chatprovide();
 
   const groupgetfn = async () => {
     try {
@@ -43,20 +48,23 @@ const Groupchats = () => {
           <div
             key={getgrp._id}
             className="flex items-center p-2 rounded-2xl gap-4 group bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-[#6938EF] hover:bg-[#1a2440] transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              setSelecteduser(null);
+              setSelectedGroup(getgrp);
+              setGroupcontent(true);
+            }}
           >
             {/* Avatar */}
             <div className="relative">
-              
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg"></div>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                {getgrp?.groupname?.charAt(0)?.toUpperCase() || "U"}
+              </div>
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#131c31] rounded-full"></div>
             </div>
-           
+
             <div className="flex-1">
-              
               <div className="flex items-center justify-between">
-                
                 <h3 className="text-white font-semibold text-base">
-                
                   {getgrp.groupname}
                 </h3>
                 <span className="text-xs text-gray-400">2 min</span>

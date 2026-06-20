@@ -15,11 +15,11 @@ const Groupname = () => {
         {
           groupname,
           members: [],
-        //   admin,
+          //   admin,
         },
       );
 
-    //   console.log("group is created",creategrpapi);
+      //   console.log("group is created",creategrpapi);
 
       console.log("Group created:", creategrpapi.data);
 

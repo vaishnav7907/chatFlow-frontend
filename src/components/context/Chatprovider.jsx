@@ -22,7 +22,10 @@ export const Chatprovider = ({ children }) => {
   //group
   const [editgroup, setEditgroup] = useState(false);
 
-  const [creategroup, setCreategroup]=useState()
+  const [creategroup, setCreategroup] = useState();
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [getallgroups, setGetallgroups] = useState([]);
+  const [groupcontent, setGroupcontent] = useState(false);
 
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
@@ -95,6 +98,15 @@ export const Chatprovider = ({ children }) => {
 
         creategroup,
         setCreategroup,
+
+        groupcontent,
+        setGroupcontent,
+
+        getallgroups,
+        setGetallgroups,
+
+        selectedGroup,
+        setSelectedGroup
       }}
     >
       {children}

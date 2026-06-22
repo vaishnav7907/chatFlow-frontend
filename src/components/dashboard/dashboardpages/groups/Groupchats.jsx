@@ -14,6 +14,7 @@ const Groupchats = () => {
   } = chatprovide();
 
   const groupgetfn = async () => {
+    
     try {
       const getgroupapi = await axios.get(
         `${import.meta.env.VITE_API_URL}/ChatFlow/getgroup`,
@@ -55,11 +56,11 @@ const Groupchats = () => {
             }}
           >
             {/* Avatar */}
-            <div className="relative">
+            <div className="">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
                 {getgrp?.groupname?.charAt(0)?.toUpperCase() || "U"}
               </div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#131c31] rounded-full"></div>
+              
             </div>
 
             <div className="flex-1">

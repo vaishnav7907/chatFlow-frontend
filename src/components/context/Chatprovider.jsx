@@ -26,7 +26,11 @@ export const Chatprovider = ({ children }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [getallgroups, setGetallgroups] = useState([]);
   const [groupcontent, setGroupcontent] = useState(false);
+  const [groupmessages, setGroupmessages] = useState([]);
+  const [groupText, setGroupText] = useState("");
 
+
+  const [addMemberModal,setAddMemberModal] = useState(false)
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
@@ -62,6 +66,49 @@ export const Chatprovider = ({ children }) => {
     setMessagesubmit("");
   };
 
+  // group message......................
+
+  // join selected group
+
+  useEffect(() => {
+    if (!socket || !selectedGroup) return;
+    socket.emit("joingroup", selectedGroup._id);
+    console.log("Joined Group:", selectedGroup._id);
+  }, [socket, selectedGroup]);
+
+  // recieve group messages
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("recieveGroupMsg", (newmessage) => {
+      console.log("new group msgs", newmessage);
+      setGroupmessages((prev) => [...prev, newmessage]);
+    });
+
+    return () => {
+      socket.off("recieveGroupMsg");
+    };
+  }, [socket]);
+
+  // send group messages
+
+  const sendgroupMessages = () => {
+    if (!groupText.trim() || !selectedGroup) return;
+    socket.emit("sendGroupMsg", {
+      groupid: selectedGroup._id,
+      senderid: currentuserid,
+      text: groupText,
+    });
+    setGroupText("");
+
+    console.log("groiupid",selectedGroup._id);
+    console.log("senderid",currentuserid);
+    console.log(" group text",groupText);
+    
+    
+    
+  };
   return (
     <ChatContext.Provider
       value={{
@@ -106,7 +153,18 @@ export const Chatprovider = ({ children }) => {
         setGetallgroups,
 
         selectedGroup,
-        setSelectedGroup
+        setSelectedGroup,
+
+        groupmessages,
+        setGroupmessages,
+
+        groupText,
+        setGroupText,
+
+        sendgroupMessages,
+
+        addMemberModal,
+        setAddMemberModal
       }}
     >
       {children}

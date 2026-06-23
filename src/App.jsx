@@ -14,6 +14,7 @@ import { Chatprovider } from "./components/context/Chatprovider";
 import Contentchat from "./components/dashboard/contentChat/Contentchat";
 import ChatArea from "./components/dashboard/contentChat/ChatArea";
 import Startmessage from "./components/dashboard/contentChat/Startmessage";
+import GroupProfile from "./components/dashboard/dashboardpages/groups/GroupProfile";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -37,9 +38,6 @@ function App() {
               />
             </Route>
 
-
-
-
             <Route
               path="/dashboard"
               element={
@@ -48,21 +46,11 @@ function App() {
             >
               <Route index element={<Allchats />} />
               <Route path="groupchat" element={<Groupchats />} />
-              <Route path="contactchats" element={<Contactchat />} />
-              
+              <Route path="contactchats" element={<Contactchat />} /> 
             </Route>
 
-
-
-
-
-
-
-
-
             <Route path="/chatbar" element={<Chatsidebar />} />
-
-           
+            <Route path="/groupProfile" element={<GroupProfile />} />
           </Routes>
         </BrowserRouter>
       </Chatprovider>

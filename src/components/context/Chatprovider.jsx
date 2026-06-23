@@ -28,9 +28,10 @@ export const Chatprovider = ({ children }) => {
   const [groupcontent, setGroupcontent] = useState(false);
   const [groupmessages, setGroupmessages] = useState([]);
   const [groupText, setGroupText] = useState("");
+  const [searchUsers, setSearchUsers] = useState([]);
+  const [searchData, setSearchData] = useState("");
 
-
-  const [addMemberModal,setAddMemberModal] = useState(false)
+  const [addMemberModal, setAddMemberModal] = useState(false);
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
@@ -69,45 +70,55 @@ export const Chatprovider = ({ children }) => {
   // group message......................
 
   // join selected group
-
+  // const lastGroupRef = useRef(null);
   useEffect(() => {
-    if (!socket || !selectedGroup) return;
+    if (!socket || !selectedGroup?._id) return;
+    setGroupmessages([]);
+
     socket.emit("joingroup", selectedGroup._id);
     console.log("Joined Group:", selectedGroup._id);
-  }, [socket, selectedGroup]);
+  }, [socket, selectedGroup?._id]);
 
   // recieve group messages
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("recieveGroupMsg", (newmessage) => {
+    const handler = (newmessage) => {
       console.log("new group msgs", newmessage);
-      setGroupmessages((prev) => [...prev, newmessage]);
-    });
+      setGroupmessages((prev) => {
+        const exists = prev.some((m) => m._id === newmessage._id);
+        if (exists) return prev;
+        return [...prev, newmessage];
+      });
+      // setGroupmessages((prev) => [...prev, newmessage]);
+    };
+    // socket.off("recieveGroupMsg");
+    socket.on("recieveGroupMsg", handler);
 
     return () => {
-      socket.off("recieveGroupMsg");
+      socket.off("recieveGroupMsg", handler);
     };
   }, [socket]);
 
   // send group messages
 
   const sendgroupMessages = () => {
+    if (!socket) return;
     if (!groupText.trim() || !selectedGroup) return;
-    socket.emit("sendGroupMsg", {
+
+    const sendGrpMsgs = {
       groupid: selectedGroup._id,
       senderid: currentuserid,
       text: groupText,
-    });
+    };
+    socket.emit("sendGroupMsg", sendGrpMsgs);
+    // setGroupmessages((prev)=>[...prev,sendGrpMsg])
     setGroupText("");
 
-    console.log("groiupid",selectedGroup._id);
-    console.log("senderid",currentuserid);
-    console.log(" group text",groupText);
-    
-    
-    
+    console.log("groiupid", selectedGroup._id);
+    console.log("senderid", currentuserid);
+    console.log(" group text:", groupText);
   };
   return (
     <ChatContext.Provider
@@ -164,7 +175,13 @@ export const Chatprovider = ({ children }) => {
         sendgroupMessages,
 
         addMemberModal,
-        setAddMemberModal
+        setAddMemberModal,
+
+        searchUsers,
+        setSearchUsers,
+
+        searchData,
+        setSearchData,
       }}
     >
       {children}

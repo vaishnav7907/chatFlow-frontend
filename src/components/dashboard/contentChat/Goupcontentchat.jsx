@@ -139,7 +139,7 @@ const Goupcontentchat = () => {
             </h3>
 
             <div className="flex items-center gap-2">
-              {getgrpMembers.map((groupusers) => (
+              {getgrpMembers?.map((groupusers) => (
                 <p className="text-xs text-slate-400" key={groupusers._id}>
                   {groupusers.Username},
                 </p>
@@ -194,7 +194,7 @@ const Goupcontentchat = () => {
             <button className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center">
               <BsThreeDotsVertical
                 className="text-slate-300 text-lg"
-                onClick={() => setGotoGroupProfile(true)}
+                onClick={() => setGotoGroupProfile((prev)=>!prev)}
               />
             </button>
 
@@ -216,7 +216,7 @@ const Goupcontentchat = () => {
           </div>
         )}
 
-        {groupmessages.map((grpchat) => (
+        {groupmessages?.map((grpchat) => (
           <div
             key={grpchat._id}
             className={`flex ${grpchat.senderid?._id === currentuserid ? "justify-end" : "justify-start"}`}

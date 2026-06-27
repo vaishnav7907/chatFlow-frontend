@@ -6,14 +6,14 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
+import { BsDot } from "react-icons/bs";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import Groupmembermodal from "../dashboardpages/groups/Groupmembermodal";
 import { useNavigate } from "react-router-dom";
 const Goupcontentchat = () => {
-
-  const navigate= useNavigate()
+  const navigate = useNavigate();
 
   const {
     selectedGroup,
@@ -30,8 +30,6 @@ const Goupcontentchat = () => {
     searchData,
     setSearchData,
   } = chatprovide();
-
-  
 
   // get group chats
   console.log("group messages:", groupmessages);
@@ -120,9 +118,7 @@ const Goupcontentchat = () => {
     getGoupAllMembers();
   }, [selectedGroup, addMemberModal]);
 
-  const [gotoGroupProfile,setGotoGroupProfile]=useState(false)
-
-
+  const [gotoGroupProfile, setGotoGroupProfile] = useState(false);
 
   return (
     <div className="flex flex-col h-screen">
@@ -183,24 +179,25 @@ const Goupcontentchat = () => {
           )}
 
           <button
-            className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center"
+            className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center "
             onClick={() => setSearchmember(true)}
           >
             <IoPersonAddSharp className="text-green-500 text-lg hover:scale-125 transition duration-500 hover:text-green-600" />
           </button>
           <div className="flex justify-center items-center gap-3">
-           
-
             <button className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center">
               <BsThreeDotsVertical
                 className="text-slate-300 text-lg"
-                onClick={() => setGotoGroupProfile((prev)=>!prev)}
+                onClick={() => setGotoGroupProfile((prev) => !prev)}
               />
             </button>
 
-             {gotoGroupProfile && (
-              <button className=" p-1 bg-white text-black h-8 w-8 rounded-full flex justify-center items-center hover:text-white hover:bg-black" onClick={()=>navigate("/groupProfile")}>
-                <FaArrowRight  className="text-lg hover:scale-125 transition duration-700"/>
+            {gotoGroupProfile && (
+              <button
+                className=" p-1 bg-white text-black h-8 w-8 rounded-full flex justify-center items-center hover:text-white hover:bg-black"
+                onClick={() => navigate("/groupProfile")}
+              >
+                <FaArrowRight className="text-lg hover:scale-125 transition duration-700" />
               </button>
             )}
           </div>
@@ -219,16 +216,23 @@ const Goupcontentchat = () => {
         {groupmessages?.map((grpchat) => (
           <div
             key={grpchat._id}
-            className={`flex ${grpchat.senderid?._id === currentuserid ? "justify-end" : "justify-start"}`}
+            className={`flex ${grpchat.senderid?._id === currentuserid ? "items-end" : "items-start"}  flex-col `}
           >
+            <div className="flex items-center">
+              <div className="flex items-center ">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow-md absolute">{grpchat.senderid?.Username?.charAt(0).toUpperCase()}</div>
+                <BsDot className="text-green-400 text-5xl relative bottom-2 left-0.5" />
+              </div>
+
+              <p className="text-xs font-semibold text-gray-300">
+                {grpchat.senderid?.Username}
+              </p>
+            </div>
+
             <div
               className={`max-w-[70%] px-4 py-2 rounded-2xl shadow-lg break-words 
               ${grpchat.senderid?._id === currentuserid ? "bg-blue-600 text-white rounded-br-md" : "bg-gray-700 text-white rounded-bl-md"}`}
             >
-              <p className="text-xs font-semibold text-gray-300">
-                {grpchat.senderid?.Username}
-              </p>
-
               <p className="text-sm text-white mt-1">{grpchat.text}</p>
             </div>
           </div>

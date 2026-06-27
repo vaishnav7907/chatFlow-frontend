@@ -16,7 +16,7 @@ export const Chatprovider = ({ children }) => {
   const [allusers, setAllusers] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  const currentuserid = localStorage.getItem("userId");
+  
   const [selecteduser, setSelecteduser] = useState(null);
 
   //group
@@ -32,6 +32,10 @@ export const Chatprovider = ({ children }) => {
   const [searchData, setSearchData] = useState("");
 
   const [addMemberModal, setAddMemberModal] = useState(false);
+
+//currentuserid
+  const currentuserid = localStorage.getItem("userId");
+  
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);

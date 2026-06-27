@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const Groupname = () => {
-  const { setEditgroup, creategroup, setCreategroup } = chatprovide();
+  const { setEditgroup, creategroup, setCreategroup,currentuserid } = chatprovide();
   const [groupname, setGroupname] = useState("");
   const createGroupFn = async (e) => {
     e.preventDefault();
@@ -15,7 +15,7 @@ const Groupname = () => {
         {
           groupname,
           members: [],
-          //   admin,
+            admin:currentuserid,
         },
       );
 

@@ -11,6 +11,8 @@ const GroupProfile = () => {
   // const [deleteGroup, setDeleteGroup] = useState(null);
 
   const { selectedGroup, setGetallgroups } = chatprovide();
+  console.log("selected group members :",selectedGroup.members);
+  
   const groupid = selectedGroup?._id;
   const dltgroupfn = async () => {
     try {

@@ -10,13 +10,16 @@ export const Chatprovider = ({ children }) => {
 
   const [isauth, setIsauth] = useState(false);
 
+  //onlineusers
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  //personal chat
+
   const [message, setMessage] = useState([]);
   const [messagesubmit, setMessagesubmit] = useState("");
 
   const [allusers, setAllusers] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  
   const [selecteduser, setSelecteduser] = useState(null);
 
   //group
@@ -33,9 +36,9 @@ export const Chatprovider = ({ children }) => {
 
   const [addMemberModal, setAddMemberModal] = useState(false);
 
-//currentuserid
+  //currentuserid
   const currentuserid = localStorage.getItem("userId");
-  
+
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
@@ -57,6 +60,16 @@ export const Chatprovider = ({ children }) => {
     return () => {
       socket.off("recievemessage");
     };
+  }, [socket]);
+
+  //recieve online users
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("onlineUsers", (users) => {
+      console.log("ONLINE USERS:", users);
+      setOnlineUsers(users);
+    });
+    return () => socket.off("onlineUsers");
   }, [socket]);
 
   const sendmessage = () => {
@@ -124,6 +137,7 @@ export const Chatprovider = ({ children }) => {
     console.log("senderid", currentuserid);
     console.log(" group text:", groupText);
   };
+
   return (
     <ChatContext.Provider
       value={{
@@ -186,6 +200,9 @@ export const Chatprovider = ({ children }) => {
 
         searchData,
         setSearchData,
+
+        
+        onlineUsers
       }}
     >
       {children}

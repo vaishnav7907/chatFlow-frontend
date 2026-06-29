@@ -14,7 +14,8 @@ const Contactchat = () => {
 
   console.log("token:", token);
 
-  const { allusers, setAllusers, setSelecteduser } = chatprovide();
+  const { allusers, setAllusers, selecteduser, setSelecteduser, onlineUsers } =
+    chatprovide();
 
   const getallusers = async () => {
     try {
@@ -34,7 +35,6 @@ const Contactchat = () => {
       });
 
       setAllusers(
-       
         allusersapi.data.filter((user) => String(user._id) !== String(myid)),
       );
     } catch (error) {
@@ -48,40 +48,56 @@ const Contactchat = () => {
 
   return (
     <div className=" w-full   flex flex-col gap-2">
-      {allusers.map((user) => (
-        <div
-          className="flex items-center p-2  rounded-2xl gap-4 group bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-[#6938EF] hover:bg-[#1a2440] transition-all duration-300 cursor-pointer"
-          key={user._id}
-          onClick={() => {
-            console.log("CLICKED USER:", user);
-            console.log("MY ID:", myid);
+      {allusers.map((user) => {
+        const isOnline = onlineUsers.includes(user._id);
 
-            setSelecteduser(user);
-          }}
-        >
-          {/* Avatar */}
-          <div className="relative">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
-              {user?.Username?.charAt(0)?.toUpperCase() || "U"}
+        return (
+          <div
+            className="flex items-center p-2  rounded-2xl gap-4 group bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-[#6938EF] hover:bg-[#1a2440] transition-all duration-300 cursor-pointer"
+            key={user._id}
+            onClick={() => {
+              console.log("CLICKED USER:", user);
+              console.log("MY ID:", myid);
+
+              setSelecteduser(user);
+            }}
+          >
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                {user?.Username?.charAt(0)?.toUpperCase() || "U"}
+              </div>
+
+              <div className="absolute bottom-0 right-0 w-3 h-3  rounded-full">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-3 h-3 rounded-full ${
+                      isOnline ? "bg-green-500" : "bg-gray-900"
+                    }`}
+                  ></span>
+
+                  {/* <p className="text-xs text-slate-400">
+                  {isOnline ? "Online" : "Offline"}
+                </p> */}
+                </div>
+              </div>
             </div>
 
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#131c31] rounded-full"></div>
-          </div>
+            {/* User Info */}
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-semibold text-base">
+                  {user.Username}
+                </h3>
 
-          {/* User Info */}
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-white font-semibold text-base">
-                {user.Username}
-              </h3>
+                <span className="text-xs text-gray-400">2 min</span>
+              </div>
 
-              <span className="text-xs text-gray-400">2 min</span>
+              <p className="text-sm  text-gray-400">hey man</p>
             </div>
-
-            <p className="text-sm  text-gray-400">hey man</p>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

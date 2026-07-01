@@ -11,6 +11,7 @@ const Allchats = () => {
     setGroupcontent,
     onlineUsers,
     selecteduser,
+    getAllChats
   } = chatprovide();
 
   // const isOnline = onlineUsers.includes(selecteduser._id);

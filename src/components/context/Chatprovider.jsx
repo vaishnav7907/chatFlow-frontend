@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
@@ -84,6 +85,29 @@ export const Chatprovider = ({ children }) => {
   //   };
   // }, [socket, allusers]);
 
+  const getAllChats = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const getAllMessageApi = await axios.get(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/getallchats`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      );
+console.log("getboth message",getAllMessageApi.data);
+
+      setAllchaats(getAllMessageApi.data);
+    } catch (error) {
+      console.log("get both chats error", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllChats();
+  }, []);
+
   useEffect(() => {
     if (!socket) return;
 
@@ -129,7 +153,7 @@ export const Chatprovider = ({ children }) => {
     return () => {
       socket.off("recievemessage", handler);
     };
-  }, [socket, allusers,currentuserid]);
+  }, [socket, allusers, currentuserid]);
 
   //recieve online users
   useEffect(() => {
@@ -322,6 +346,8 @@ export const Chatprovider = ({ children }) => {
 
         allchaats,
         setAllchaats,
+
+        getAllChats
       }}
     >
       {children}

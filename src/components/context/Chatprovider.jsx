@@ -36,6 +36,9 @@ export const Chatprovider = ({ children }) => {
 
   const [addMemberModal, setAddMemberModal] = useState(false);
 
+  // all group and and personal chats display
+  const [allchaats, setAllchaats] = useState([]);
+
   //currentuserid
   const currentuserid = localStorage.getItem("userId");
 
@@ -50,17 +53,83 @@ export const Chatprovider = ({ children }) => {
     socket.emit("join", currentuserid);
   }, [socket, currentuserid]);
 
+  // useEffect(() => {
+  //   if (!socket) return;
+  //   socket.on("recievemessage", (newMsg) => {
+  //     console.log("NEW MESSAGE:", newMsg);
+  //     setMessage((prev) => [...prev, newMsg]);
+
+  //     //for get all chats
+  //     const senderr = allusers.find(
+  //       (u) => String(u._id) === String(newMsg.senderid),
+  //     );
+
+  //     if (senderr) {
+  //       setAllchaats((prev) => {
+  //         const filtered = prev.filter((chat) => chat._id !== senderr._id);
+  //         return [
+  //           {
+  //             _id: senderr._id,
+  //             Username: senderr.Username,
+  //             lastMessage: newMsg.text,
+  //           },
+  //           ...filtered,
+  //         ];
+  //       });
+  //     }
+  //   });
+
+  //   return () => {
+  //     socket.off("recievemessage");
+  //   };
+  // }, [socket, allusers]);
+
   useEffect(() => {
     if (!socket) return;
-    socket.on("recievemessage", (newMsg) => {
+
+    const handler = (newMsg) => {
       console.log("NEW MESSAGE:", newMsg);
+
       setMessage((prev) => [...prev, newMsg]);
-    });
+
+      // ======== ADDED FOR ALL CHATS ========
+
+      const chatUserId =
+        String(newMsg.senderid) === String(currentuserid)
+          ? newMsg.recieverid
+          : newMsg.senderid;
+
+      const senderr = allusers.find(
+        (u) => String(u._id) === String(chatUserId),
+      );
+      // const senderr = allusers.find(
+      //   (u) => String(u._id) === String(newMsg.senderid),
+      // );
+
+      if (senderr) {
+        setAllchaats((prev) => {
+          const filtered = prev.filter((chat) => chat._id !== senderr._id);
+
+          return [
+            {
+              _id: senderr._id,
+              Username: senderr.Username,
+              lastMessage: newMsg.text,
+              createdAt: newMsg.createdAt,
+            },
+            ...filtered,
+          ];
+        });
+      }
+      // ======== END ========
+    };
+
+    socket.on("recievemessage", handler);
 
     return () => {
-      socket.off("recievemessage");
+      socket.off("recievemessage", handler);
     };
-  }, [socket]);
+  }, [socket, allusers,currentuserid]);
 
   //recieve online users
   useEffect(() => {
@@ -80,7 +149,21 @@ export const Chatprovider = ({ children }) => {
       recieverid: selecteduser._id,
       text: messagesubmit,
     });
+    // ===== ADDED =====
+    setAllchaats((prev) => {
+      const filtered = prev.filter((chat) => chat._id !== selecteduser._id);
 
+      return [
+        {
+          _id: selecteduser._id,
+          Username: selecteduser.Username,
+          lastMessage: messagesubmit,
+          createdAt: new Date(),
+        },
+        ...filtered,
+      ];
+    });
+    // ===== END =====
     setMessagesubmit("");
   };
 
@@ -101,7 +184,7 @@ export const Chatprovider = ({ children }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handler = (newmessage) => {
+    const handlerr = (newmessage) => {
       console.log("new group msgs", newmessage);
       setGroupmessages((prev) => {
         const exists = prev.some((m) => m._id === newmessage._id);
@@ -109,14 +192,33 @@ export const Chatprovider = ({ children }) => {
         return [...prev, newmessage];
       });
       // setGroupmessages((prev) => [...prev, newmessage]);
+
+      //for get all chat
+      const groupp = getallgroups.find(
+        (g) => String(g._id) === String(newmessage.groupid),
+      );
+      if (groupp) {
+        setAllchaats((prev) => {
+          const filtered = prev.filter((chat) => chat._id !== groupp._id);
+          return [
+            {
+              _id: groupp._id,
+              groupname: groupp.groupname,
+              lastMessage: newmessage.text,
+              createdAt: newmessage.createdAt,
+            },
+            ...filtered,
+          ];
+        });
+      }
     };
     // socket.off("recieveGroupMsg");
-    socket.on("recieveGroupMsg", handler);
+    socket.on("recieveGroupMsg", handlerr);
 
     return () => {
-      socket.off("recieveGroupMsg", handler);
+      socket.off("recieveGroupMsg", handlerr);
     };
-  }, [socket]);
+  }, [socket, getallgroups]);
 
   // send group messages
 
@@ -131,6 +233,21 @@ export const Chatprovider = ({ children }) => {
     };
     socket.emit("sendGroupMsg", sendGrpMsgs);
     // setGroupmessages((prev)=>[...prev,sendGrpMsg])
+
+    //for gett allchats
+
+    setAllchaats((prev) => {
+      const filtered = prev.filter((chat) => chat._id !== selectedGroup._id);
+      return [
+        {
+          _id: selectedGroup._id,
+          groupname: selectedGroup.groupname,
+          lastMessage: groupText,
+          createdAt: new Date(),
+        },
+        ...filtered,
+      ];
+    });
     setGroupText("");
 
     console.log("groiupid", selectedGroup._id);
@@ -201,8 +318,10 @@ export const Chatprovider = ({ children }) => {
         searchData,
         setSearchData,
 
-        
-        onlineUsers
+        onlineUsers,
+
+        allchaats,
+        setAllchaats,
       }}
     >
       {children}

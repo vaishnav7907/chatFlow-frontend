@@ -8,7 +8,7 @@ const Chatsidebar = () => {
     {
       path: "/dashboard",
       icon: <HiOutlineChatBubbleOvalLeft />,
-      name: "All",
+      name: "All chats",
     },
     {
       path: "/dashboard/groupchat",

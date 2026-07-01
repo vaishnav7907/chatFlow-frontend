@@ -57,7 +57,7 @@ const Allchats = () => {
                     className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-[#131c31] rounded-full ${
                       onlineUsers.includes(chaats._id)
                         ? "bg-green-500"
-                        : "bg-gray-800"
+                        : "bg-gray-900"
                     }`}
                   />
                 )}

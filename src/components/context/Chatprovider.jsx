@@ -96,7 +96,7 @@ export const Chatprovider = ({ children }) => {
           },
         },
       );
-console.log("getboth message",getAllMessageApi.data);
+      console.log("getboth message", getAllMessageApi.data);
 
       setAllchaats(getAllMessageApi.data);
     } catch (error) {
@@ -347,7 +347,7 @@ console.log("getboth message",getAllMessageApi.data);
         allchaats,
         setAllchaats,
 
-        getAllChats
+        getAllChats,
       }}
     >
       {children}

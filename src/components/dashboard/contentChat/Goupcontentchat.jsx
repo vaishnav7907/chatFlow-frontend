@@ -196,7 +196,7 @@ const Goupcontentchat = () => {
             {gotoGroupProfile && (
               <button
                 className=" p-1 bg-white text-black h-8 w-8 rounded-full flex justify-center items-center hover:text-white hover:bg-black"
-                onClick={() => navigate("/groupProfile")}
+                onClick={() => navigate("/dashboard/groupchat/groupProfile")}
               >
                 <FaArrowRight className="text-lg hover:scale-125 transition duration-700" />
               </button>

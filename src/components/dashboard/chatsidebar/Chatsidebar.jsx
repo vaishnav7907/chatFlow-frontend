@@ -9,7 +9,7 @@ const Chatsidebar = () => {
     {
       path: "/dashboard",
       icon: <HiOutlineChatBubbleOvalLeft size={22} />,
-      name: "Chats",
+      name: "All Chats",
     },
     {
       path: "/dashboard/groupchat",
@@ -32,7 +32,7 @@ const Chatsidebar = () => {
             to={item.path}
             end={item.path === "/dashboard"}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center gap-2 rounded-2xl py-3 transition-all duration-300 ${
+              `flex flex-col items-center justify-center gap-2 rounded-2xl py-1 transition-all duration-300 ${
                 isActive
                   ? " border border-gray-500 text-white"
                   : "bg-slate-800/40 border border-transparent text-slate-400 hover:bg-slate-700/50 hover:text-white"

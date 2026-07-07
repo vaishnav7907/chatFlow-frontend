@@ -15,6 +15,8 @@ import Contentchat from "./components/dashboard/contentChat/Contentchat";
 import ChatArea from "./components/dashboard/contentChat/ChatArea";
 import Startmessage from "./components/dashboard/contentChat/Startmessage";
 import GroupProfile from "./components/dashboard/dashboardpages/groups/GroupProfile";
+import EditProfile from "./components/authentication/profile/EditProfile";
+import ProtectRouter from "./components/protectRouter/ProtectRouter";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -38,19 +40,25 @@ function App() {
               />
             </Route>
 
-            <Route
+            {/* <Route
               path="/dashboard"
               element={
                 isauth ? <Maindashboard /> : <Navigate to={"/authentication"} />
               }
-            >
+            > */}
+            <Route element={<ProtectRouter isauth={isauth}/> }>
+
+            <Route path="/dashboard" element={<Maindashboard/>} >
               <Route index element={<Allchats />} />
               <Route path="groupchat" element={<Groupchats />} />
-              <Route path="contactchats" element={<Contactchat />} /> 
+              <Route path="contactchats" element={<Contactchat />} />
             </Route>
 
-            <Route path="/chatbar" element={<Chatsidebar />} />
-            <Route path="/groupProfile" element={<GroupProfile />} />
+           
+              {/* <Route path="/dashboard/chatbar" element={<Chatsidebar />} /> */}
+              <Route path="/dashboard/groupchat/groupProfile" element={<GroupProfile />} />
+              <Route path="/dashboard/profile" element={<EditProfile />} />
+           </Route>
           </Routes>
         </BrowserRouter>
       </Chatprovider>

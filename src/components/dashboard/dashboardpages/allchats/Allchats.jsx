@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { chatprovide } from "../../../context/Chatprovider";
-
+import { MdGroups2 } from "react-icons/md";
 const Allchats = () => {
   const {
     allchaats,
@@ -11,10 +11,14 @@ const Allchats = () => {
     setGroupcontent,
     onlineUsers,
     selecteduser,
-    getAllChats
+    getAllChats,
+    ProfileImage,
   } = chatprovide();
 
   // const isOnline = onlineUsers.includes(selecteduser._id);
+
+  console.log("allchats", allchaats);
+  console.log("onlineusers", onlineUsers);
 
   const SetallChat = (chat) => {
     if (chat.Username) {
@@ -43,24 +47,34 @@ const Allchats = () => {
             >
               <div className="relative">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                  {(chaats.Username || chaats.groupname)
-                    ?.charAt(0)
-                    ?.toUpperCase()}
+                  {chaats.ProfileImage ? (
+                    <img
+                      src={chaats.ProfileImage}
+                      alt={chaats.Username || chaats.groupname}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <span>
+                      {(chaats.Username || chaats.groupname)
+                        ?.charAt(0)
+                        ?.toUpperCase()}
+                    </span>
+                  )}
                 </div>
 
-
-                {/* online users */}
-
-                
-                {chaats.Username && (
-                  <div
-                    className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-[#131c31] rounded-full ${
-                      onlineUsers.includes(chaats._id)
-                        ? "bg-green-500"
-                        : "bg-gray-900"
-                    }`}
-                  />
-                )}
+                <div className="absolute bottom-0 right-0">
+                  {chaats.Username ? (
+                    <div
+                      className={`w-3 h-3 rounded-full border-2 border-[#131c31] ${
+                        onlineUsers.includes(String(chaats._id))
+                          ? "bg-green-500"
+                          : "bg-gray-900"
+                      }`}
+                    />
+                  ) : chaats.groupname ? (
+                    <MdGroups2 size={20} className="text-indigo-100" />
+                  ) : null}
+                </div>
               </div>
 
               <div className="flex-1">

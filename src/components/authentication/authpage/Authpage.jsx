@@ -1,47 +1,83 @@
 import React from "react";
-import { FaCircleUser } from "react-icons/fa6";
-import { LuLogIn } from "react-icons/lu";
-import Signup from "../signup/Signup";
-import Signin from "../signin/Signin";
 import { Link, Outlet } from "react-router-dom";
+import { LuLogIn } from "react-icons/lu";
+import { FaCircleUser } from "react-icons/fa6";
+import { IoChatbubbleEllipses, IoCheckmarkDone } from "react-icons/io5";
 
 const Authpage = () => {
   const authclick = [
     {
-      icon: <LuLogIn size={30} />,
+      icon: <LuLogIn size={22} />,
       path: "/authentication",
     },
     {
-      icon: <FaCircleUser size={30} />,
+      icon: <FaCircleUser size={22} />,
       path: "/authentication/signup",
     },
   ];
+
   return (
-    <div className="h-screen w-full  bg-gradient-to-br from-[#0B1120] via-[#1F1147] to-[#6938EF] shadow-[0_0_40px_rgba(105,56,239,0.35)]    ">
-      <div className="flex  items-center ">
-        <div className="w-1/2  h-screen flex flex-col  justify-center items-center  ">
-          <h1 className="text-white text-3xl md:text-5xl font-extrabold tracking-wide text-center">
-            Your <span className="text-[#A78BFA] italic">people</span>, Your{" "}
-            <span className=" italic">space</span>.
-          </h1>
+    <div className="min-h-screen bg-[#08111f] overflow-hidden">
 
-          
-            <div className= " flex gap-5 mt-10 ">
-              {authclick.map((data, index) => (
-              <Link to={data.path} className="text-white  hover:scale-125 transition duration-500" >
-                
-                  {data.icon}
-                  
-              
-              </Link>
-          ))}
+      {/* Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-20 w-80 h-80 bg-cyan-500/20 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-20 w-96 h-96 bg-purple-600/20 rounded-full blur-[170px]" />
+      </div>
 
+      <div className="relative flex h-screen ">
+
+        {/* LEFT SIDE */}
+        <div className="w-1/2 flex justify-center items-center px-16">
+
+          <div>
+
+            <span className="px-5 py-2 rounded-full bg-cyan-500/20 text-cyan-300 text-sm">
+               Real Time Messaging
+            </span>
+
+            <h1 className="text-6xl font-black text-white mt-8 leading-tight">
+              Stay
+              <br />
+              Connected
+              <br />
+              Everywhere.
+            </h1>
+
+            <p className="text-gray-400 text-lg mt-8 max-w-lg leading-8">
+              ChatFlow lets you connect with friends, family and teams in
+              real-time. Beautiful UI, secure messaging and powerful group
+              conversations.
+            </p>
+
+            <div className="flex gap-5 mt-12">
+              {authclick.map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.path}
+                  className="w-16 h-16 rounded-full bg-cyan-500 hover:bg-cyan-400 text-white flex items-center justify-center transition duration-300 hover:scale-110"
+                >
+                  {item.icon}
+                </Link>
+              ))}
             </div>
+
+          </div>
+
         </div>
 
-        <div className="bg-white w-1/2 h-screen flex col justify-center items-center rounded-l-full    ">
-          <Outlet />
+        {/* CENTER PHONE */}
+       
+
+        {/* RIGHT SIDE */}
+        <div className=" h-full w-full flex justify-center items-center ">
+
+          <div className=" bg-white rounded-2xl w-[50%] h-[60%] p-3 flex justify-center items-center">
+            <Outlet />
+          </div>
+
         </div>
+
       </div>
     </div>
   );

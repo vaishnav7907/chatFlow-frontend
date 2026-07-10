@@ -9,7 +9,8 @@ const Signin = ({ tohome }) => {
   //const context=chatprovide()
   //console.log("context",context);
 
-  const { Email, setEmail, Password, setPassword } = chatprovide();
+  const { Email, setEmail, Password, setPassword, setCurrentuserid } =
+    chatprovide();
 
   const emailonchange = (e) => {
     setEmail(e.target.value);
@@ -43,7 +44,7 @@ const Signin = ({ tohome }) => {
         const userId = signinapi.data.user.id;
         console.log("USER ID SAVED:", userId);
         localStorage.setItem("userId", userId);
-
+        setCurrentuserid(userId);
         console.log("USER FROM API:", signinapi.data.user);
 
         console.log("LOCAL SAVED ID:", localStorage.getItem("userId"));

@@ -40,8 +40,18 @@ export const Chatprovider = ({ children }) => {
   // all group and and personal chats display
   const [allchaats, setAllchaats] = useState([]);
 
+  //cloudinary
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState("");
+  const [ProfileImage, setProfileImage] = useState("");
+
   //currentuserid
-  const currentuserid = localStorage.getItem("userId");
+
+
+  const [currentuserid, setCurrentuserid] = useState(
+  localStorage.getItem("userId")
+);
+  // const currentuserid = localStorage.getItem("userId");
 
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
@@ -105,8 +115,10 @@ export const Chatprovider = ({ children }) => {
   };
 
   useEffect(() => {
-    getAllChats();
-  }, []);
+    if (currentuserid) {
+      getAllChats();
+    }
+  }, [currentuserid]);
 
   useEffect(() => {
     if (!socket) return;
@@ -155,9 +167,10 @@ export const Chatprovider = ({ children }) => {
     };
   }, [socket, allusers, currentuserid]);
 
-  //recieve online users
+  //recieve online users///////////////////////////////////////////////////
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !onlineUsers ) return;
+    
     socket.on("onlineUsers", (users) => {
       console.log("ONLINE USERS:", users);
       setOnlineUsers(users);
@@ -279,6 +292,37 @@ export const Chatprovider = ({ children }) => {
     console.log(" group text:", groupText);
   };
 
+  // get profile img ............./////////////////////
+
+  const token = localStorage.getItem("token");
+
+  const getprofilepic = async () => {
+    try {
+      const profilepicapi = await axios.get(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/getProfileImg`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log("getprofilepic", profilepicapi.data);
+      if (profilepicapi.data.success) {
+        setProfileImage(profilepicapi.data.profileImg);
+      }
+    } catch (error) {
+      console.log("get profile pic error", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentuserid) {
+      getprofilepic();
+    }
+  }, [currentuserid]);
+
   return (
     <ChatContext.Provider
       value={{
@@ -309,6 +353,7 @@ export const Chatprovider = ({ children }) => {
         sendmessage,
 
         currentuserid,
+        setCurrentuserid,
 
         editgroup,
         setEditgroup,
@@ -348,6 +393,17 @@ export const Chatprovider = ({ children }) => {
         setAllchaats,
 
         getAllChats,
+
+        image,
+        setImage,
+
+        preview,
+        setPreview,
+
+        ProfileImage,
+        setProfileImage,
+
+        getprofilepic
       }}
     >
       {children}

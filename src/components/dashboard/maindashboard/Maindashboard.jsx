@@ -1,6 +1,6 @@
 // Maindashboard.jsx
 
-import React from "react";
+import React, { useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 import Chatsidebar from "../chatsidebar/Chatsidebar";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -9,9 +9,22 @@ import Contentchat from "../contentChat/Contentchat";
 import Startmessage from "../contentChat/Startmessage";
 import ChatArea from "../contentChat/ChatArea";
 import { IoSettingsOutline } from "react-icons/io5";
+import { chatprovide } from "../../context/Chatprovider";
+import { IoIosLogOut } from "react-icons/io";
 const Maindashboard = () => {
+  const { ProfileImage, preview, allusers, getAllChats , getprofilepic} = chatprovide();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    getAllChats();
+    getprofilepic()
+  }, []);
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
+  
   return (
     <div className="h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
       <div className="flex h-full">
@@ -21,11 +34,17 @@ const Maindashboard = () => {
 
           <div>
             <div className="flex items-center gap-3 border-b border-slate-700/50">
-             
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center shadow-xl border-4 border-slate-800">
-                  <IoMdContact className="w-full h-full bg-cover text-white" />
-                </div>
-              
+              <div className="w-12 h-12 rounded-full  flex items-center justify-center shadow-xl border-4 border-slate-800">
+                {ProfileImage ? (
+                  <img
+                    className="w-full h-full rounded-full object-cover"
+                    src={ProfileImage}
+                    alt="profile"
+                  />
+                ) : (
+                  <IoMdContact className="w-full h-full rounded-full bg-cover text-white bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600" />
+                )}
+              </div>
 
               <div className="h-20  flex items-center">
                 <p className="text-2xl font-semibold text-white">
@@ -62,10 +81,20 @@ const Maindashboard = () => {
           </div>
 
           {/* settings */}
-          <div className="border-t border-slate-700/50 pt-4">
-            <button className="flex items-center gap-2 text-white hover:text-blue-400 transition" onClick={()=>navigate("/dashboard/profile")}>
+          <div className="border-t border-slate-700/50 pt-4 flex justify-between">
+            <button
+              className="flex items-center gap-2 text-white hover:text-blue-400 transition"
+              onClick={() => navigate("/dashboard/profile")}
+            >
               <IoSettingsOutline className="text-2xl" />
               <span>Settings</span>
+            </button>
+
+            <button
+              className=" text-white hover:text-red-500 hover:scale-x-110 transition duration-500"
+              onClick={() => logout()}
+            >
+              <IoIosLogOut className="text-2xl" />
             </button>
           </div>
         </div>

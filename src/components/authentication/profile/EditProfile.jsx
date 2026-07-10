@@ -6,11 +6,13 @@ import { MdSaveAs } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaPencil } from "react-icons/fa6";
 import axios from "axios";
+import { chatprovide } from "../../context/Chatprovider";
 const EditProfile = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState("");
+
+  const {image,setImage,preview,setPreview,ProfileImage,setProfileImage, } = chatprovide();
+
   const onchangeProfileImg = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -38,23 +40,24 @@ const EditProfile = () => {
           },
         },
       );
-// setPreview(uploadimage.data.user.profileImage)
+      // setPreview(uploadimage.data.user.profileImage)
       console.log(uploadimage.data);
+      setProfileImage(uploadimage.data.profileImg);
       alert("profile image uploaded successfully");
-      
     } catch (error) {
-      console.log("profile img uploaded error",error);
+      console.log("profile img uploaded error", error);
       alert("Upload failed");
     }
   };
 
-  useEffect(()=>{
-    return()=>{
-      if(preview){
-        URL.revokeObjectURL(preview)
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
       }
-    }
-  },[preview])
+    };
+  }, [preview]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-6 flex justify-center items-center">
       <div className="w-full max-w-3xl rounded-3xl overflow-hidden border border-slate-700/40 bg-[#111827]/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3">
@@ -80,6 +83,12 @@ const EditProfile = () => {
               {preview ? (
                 <img
                   src={preview}
+                  alt="profile"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : ProfileImage ? (
+                <img
+                  src={ProfileImage}
                   alt="profile"
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -125,7 +134,10 @@ const EditProfile = () => {
           </div>
 
           <div className=" w-full flex justify-end pt-5">
-            <button className="flex justify-center items-center gap-2 text-white border border-cyan-300 rounded-lg p-1 bg-gray-900 hover:scale-105 transition duration-500" onClick={uploadprofileimg}>
+            <button
+              className="flex justify-center items-center gap-2 text-white border border-cyan-300 rounded-lg p-1 bg-gray-900 hover:scale-105 transition duration-500"
+              onClick={uploadprofileimg}
+            >
               <MdSaveAs size={26} className="" />
               <p className="text-lg">save</p>
             </button>

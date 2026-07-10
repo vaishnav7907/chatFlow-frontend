@@ -14,8 +14,15 @@ const Contactchat = () => {
 
   console.log("token:", token);
 
-  const { allusers, setAllusers, selecteduser, setSelecteduser, onlineUsers } =
-    chatprovide();
+  const {
+    allusers,
+    setAllusers,
+    selecteduser,
+    setSelecteduser,
+    onlineUsers,
+    ProfileImage,
+    preview,
+  } = chatprovide();
 
   const getallusers = async () => {
     try {
@@ -64,8 +71,18 @@ const Contactchat = () => {
           >
             {/* Avatar */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                {user?.Username?.charAt(0)?.toUpperCase() || "U"}
+              <div className="w-10 h-10 rounded-full">
+                {user.ProfileImage ? (
+                  <img
+                    className="w-full h-full object-cover rounded-full"
+                    src={user.ProfileImage}
+                    alt="profile"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    {user?.Username?.charAt(0)?.toUpperCase() || "U"}
+                  </div>
+                )}
               </div>
 
               <div className="absolute bottom-0 right-0 w-3 h-3  rounded-full">

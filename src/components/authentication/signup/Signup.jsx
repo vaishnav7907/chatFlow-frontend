@@ -61,7 +61,7 @@ const Signup = ({ todashboard }) => {
           </h1>
         </div>
 
-        <div className="pt-7">
+        <div className="pt-4">
           <form action="" onSubmit={submitt}>
             <div className="flex flex-col gap-3 ">
               <div>
@@ -115,7 +115,7 @@ const Signup = ({ todashboard }) => {
                 />
               </div> */}
 
-              <div className="pt-7">
+              <div className="pt-4">
                 <button
                   className=" bg-gradient-to-r from-[#7C4DFF] via-[#6938EF] to-[#5B21B6] hover:from-[#8B5CF6] hover:via-[#7C3AED] hover:to-[#6D28D9] w-full h-12  rounded-2xl text-white"
                   type="submit"

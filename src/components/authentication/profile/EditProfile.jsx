@@ -11,7 +11,19 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  const {image,setImage,preview,setPreview,ProfileImage,setProfileImage, } = chatprovide();
+  const {
+    image,
+    setImage,
+    preview,
+    setPreview,
+    ProfileImage,
+    setProfileImage,
+    currentuserid,
+    Email,
+    setEmail,
+    setUsername,
+    Username,
+  } = chatprovide();
 
   const onchangeProfileImg = (e) => {
     const file = e.target.files[0];
@@ -42,7 +54,12 @@ const EditProfile = () => {
       );
       // setPreview(uploadimage.data.user.profileImage)
       console.log(uploadimage.data);
+
       setProfileImage(uploadimage.data.profileImg);
+      setPreview("");
+      console.log("Before setImage(null):", image);
+      setImage(null);
+      console.log("After setImage(null):", image);
       alert("profile image uploaded successfully");
     } catch (error) {
       console.log("profile img uploaded error", error);
@@ -57,6 +74,35 @@ const EditProfile = () => {
       }
     };
   }, [preview]);
+
+  const editProfileInfo = async () => {
+    try {
+      const updateProfileApi = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/updateProfile/${currentuserid}`,
+        { Email, Username },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log(updateProfileApi.data);
+      alert(updateProfileApi.data.message);
+    } catch (error) {
+      console.log("error in update profile", error);
+    }
+  };
+
+  const handlesave = async () => {
+    console.log("image:", image);
+
+    await editProfileInfo();
+
+    if (image) {
+      console.log("Uploading image...");
+      await uploadprofileimg();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-6 flex justify-center items-center">
@@ -119,6 +165,8 @@ const EditProfile = () => {
                 type="text"
                 placeholder="Username"
                 className="w-full h-11 pl-4 pr-4 rounded-xl bg-gray-800 text-white  border border-gray-700  placeholder:text-gray-400  focus:outline-none focus:border-cyan-400 focus:ring-2  focus:ring-cyan-400/20  transition-all duration-300 relative"
+                value={Username}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <FaPencil className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer pl-1" />
             </div>
@@ -128,6 +176,8 @@ const EditProfile = () => {
                 type="email"
                 placeholder="example@gmail.com"
                 className="w-full h-11 pl-4 pr-4 rounded-xl bg-gray-800 text-white border border-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-cyan-400  focus:ring-2  focus:ring-cyan-400/20  transition-all duration-300"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <FaPencil className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" />
             </div>
@@ -136,7 +186,7 @@ const EditProfile = () => {
           <div className=" w-full flex justify-end pt-5">
             <button
               className="flex justify-center items-center gap-2 text-white border border-cyan-300 rounded-lg p-1 bg-gray-900 hover:scale-105 transition duration-500"
-              onClick={uploadprofileimg}
+              onClick={handlesave}
             >
               <MdSaveAs size={26} className="" />
               <p className="text-lg">save</p>

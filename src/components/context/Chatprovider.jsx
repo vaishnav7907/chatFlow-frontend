@@ -46,13 +46,10 @@ export const Chatprovider = ({ children }) => {
   const [ProfileImage, setProfileImage] = useState("");
 
   //currentuserid
-
-
-  const [currentuserid, setCurrentuserid] = useState(
-  localStorage.getItem("userId")
-);
+  const [currentuserid, setCurrentuserid] = useState(localStorage.getItem("userId"));
   // const currentuserid = localStorage.getItem("userId");
 
+  
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);

@@ -12,25 +12,36 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { chatprovide } from "../../context/Chatprovider";
 import { IoIosLogOut } from "react-icons/io";
 const Maindashboard = () => {
-  const { ProfileImage, preview, allusers, getAllChats , getprofilepic} = chatprovide();
+  const {
+    ProfileImage,
+    preview,
+    allusers,
+    getAllChats,
+    getprofilepic,
+    selecteduser,
+    selectedGroup,
+  } = chatprovide();
+  const isChatOpen = selecteduser || selectedGroup;
+
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllChats();
-    getprofilepic()
+    getprofilepic();
   }, []);
   const logout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
   };
 
-  
   return (
     <div className="h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
       <div className="flex h-full">
         {/* SIDEBAR */}
-        
-        <div className="w-72 bg-[#10192C] pl-4 pr-4 pb-4 pt-1 border-r border-slate-700/50 flex flex-col">
+
+        <div
+          className={`${isChatOpen ? "hidden md:flex" : "flex"} w-full md:w-72 bg-[#10192C] pl-4 pr-4 pb-4 pt-1 border-r border-slate-700/50  flex-col`}
+        >
           {/* LOGO */}
 
           <div>
@@ -48,13 +59,11 @@ const Maindashboard = () => {
               </div>
 
               <div className="h-20  flex items-center">
-                <p className="text-2xl font-semibold text-white">
-                  Chat
-                  <span className="italic font-normal text-4xl text-blue-400">
-                    f
-                  </span>
-                  low
-                </p>
+                <h1 className="font-serif italic tracking-wide
+               text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+  <span className="text-white">Chat</span>
+  <span className="text-white">Flow</span>
+</h1>
               </div>
             </div>
 
@@ -102,7 +111,9 @@ const Maindashboard = () => {
 
         {/* RIGHT SIDE */}
 
-        <div className=" flex-1 w-full">
+        <div
+          className={`${isChatOpen ? "" : "hidden md:flex"} flex-1 w-full justify-center items-center`}
+        >
           <ChatArea />
           {/* <Contentchat /> */}
         </div>

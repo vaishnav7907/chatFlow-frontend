@@ -25,7 +25,7 @@ export const Chatprovider = ({ children }) => {
 
   //group
   const [editgroup, setEditgroup] = useState(false);
-
+  const [getgrpMembers, setGetgrpMembers] = useState([]);
   const [creategroup, setCreategroup] = useState();
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [getallgroups, setGetallgroups] = useState([]);
@@ -46,10 +46,11 @@ export const Chatprovider = ({ children }) => {
   const [ProfileImage, setProfileImage] = useState("");
 
   //currentuserid
-  const [currentuserid, setCurrentuserid] = useState(localStorage.getItem("userId"));
+  const [currentuserid, setCurrentuserid] = useState(
+    localStorage.getItem("userId"),
+  );
   // const currentuserid = localStorage.getItem("userId");
 
-  
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_API_URL}`);
     setSocket(newSocket);
@@ -166,8 +167,8 @@ export const Chatprovider = ({ children }) => {
 
   //recieve online users///////////////////////////////////////////////////
   useEffect(() => {
-    if (!socket || !onlineUsers ) return;
-    
+    if (!socket || !onlineUsers) return;
+
     socket.on("onlineUsers", (users) => {
       console.log("ONLINE USERS:", users);
       setOnlineUsers(users);
@@ -369,6 +370,8 @@ export const Chatprovider = ({ children }) => {
 
         groupmessages,
         setGroupmessages,
+        getgrpMembers,
+        setGetgrpMembers,
 
         groupText,
         setGroupText,
@@ -400,7 +403,7 @@ export const Chatprovider = ({ children }) => {
         ProfileImage,
         setProfileImage,
 
-        getprofilepic
+        getprofilepic,
       }}
     >
       {children}

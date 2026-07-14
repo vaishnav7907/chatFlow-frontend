@@ -5,8 +5,12 @@ import { chatprovide } from "../../context/Chatprovider";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-
+import { FaArrowLeft } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 const Contentchat = () => {
+
+const navigate=useNavigate()
+
   const {
     selecteduser,
     message,
@@ -16,6 +20,7 @@ const Contentchat = () => {
     sendmessage,
     currentuserid,
     onlineUsers,
+    setSelecteduser
   } = chatprovide();
   const isOnline = onlineUsers.includes(selecteduser._id);
   // console.log("message:");
@@ -74,10 +79,16 @@ const Contentchat = () => {
       {/* Header */}
       <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
-            {selecteduser?.Username?.charAt(0)?.toUpperCase() || "U"}
-          </div>
+          <div className="flex items-center gap-3  ">
 
+            <div className="block md:hidden lg:hidden" onClick={()=>setSelecteduser(null)}>
+              <FaArrowLeft className="text-2xl text-white"/>
+            </div>
+
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
+              {selecteduser?.Username?.charAt(0)?.toUpperCase() || "U"}
+            </div>
+          </div>
           <div>
             <h3 className="text-white font-semibold text-lg">
               {selecteduser?.Username || "Select User"}

@@ -8,22 +8,24 @@ import Goupcontentchat from "./Goupcontentchat";
 
 const ChatArea = () => {
   const { selecteduser, editgroup, groupcontent } = chatprovide();
-
+  const isChatOpen = selecteduser || groupcontent;
   console.log("chat area user :", selecteduser);
 
   return (
-    <div className="h-screen  relative">
+    <div className="h-full  relative">
       {/* {selecteduser ? <Contentchat /> : <Startmessage />}
       {groupcontent? <Goupcontentchat/>: <Startmessage/> } */}
 
-      {selecteduser ? (
-        <Contentchat />
-      ) : groupcontent ? (
-        <Goupcontentchat />
+      {isChatOpen ? (
+        selecteduser ? (
+          <Contentchat />
+        ) : (
+          <Goupcontentchat />
+        )
       ) : (
         <Startmessage />
       )}
-      
+
       {editgroup && <Groupname />}
     </div>
   );

@@ -105,7 +105,7 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-6 flex justify-center items-center">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-6 flex justify-center items-center w-full">
       <div className="w-full max-w-3xl rounded-3xl overflow-hidden border border-slate-700/40 bg-[#111827]/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3">
         <div>
           <div className="flex gap-7">
@@ -123,7 +123,7 @@ const EditProfile = () => {
           </div>
         </div>
 
-        <div className="w-full flex flex-col items-center pl-12 pr-12 pt-5 pb-5">
+        <div className="w-full flex flex-col items-center md:pl-12 md:pr-12 pt-5 pb-5">
           <div className="relative">
             <div className="w-24 h-24 rounded-full  flex items-center justify-center shadow-xl border-4 border-slate-800">
               {preview ? (

@@ -2,11 +2,9 @@ import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
 import { chatprovide } from "../../context/Chatprovider";
-import { IoPersonAddSharp } from "react-icons/io5";
-import { IoSearchOutline } from "react-icons/io5";
-import { MdClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { BsDot } from "react-icons/bs";
+import { FaArrowLeft } from "react-icons/fa6";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -17,6 +15,7 @@ const Goupcontentchat = () => {
 
   const {
     selectedGroup,
+    setSelectedGroup,
     groupmessages,
     setGroupmessages,
     groupText,
@@ -30,6 +29,8 @@ const Goupcontentchat = () => {
     searchData,
     setSearchData,
     onlineUsers,
+    getgrpMembers,
+    setGetgrpMembers,
   } = chatprovide();
 
   // get group chats
@@ -65,37 +66,6 @@ const Goupcontentchat = () => {
     setGroupText(e.target.value);
   };
 
-  const [addmember, setaddmember] = useState(false);
-  const [searchmember, setSearchmember] = useState(false);
-
-  const addmembertogroup = async (userid) => {
-    try {
-      const addmemberapi = await axios.post(
-        `${import.meta.env.VITE_API_URL}/ChatFlow/addMembersToGroup`,
-        { groupid: selectedGroup._id, userid: userid },
-      );
-
-      alert("member added");
-    } catch (error) {
-      console.log("add member to group", error);
-    }
-  };
-
-  // serach
-
-  const searchGroupUsers = async (value) => {
-    try {
-      const searchuserApi = await axios.get(
-        `${import.meta.env.VITE_API_URL}/ChatFlow/searchUser?search=${value}`,
-      );
-      setSearchUsers(searchuserApi.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const [getgrpMembers, setGetgrpMembers] = useState([]);
-
   const getGoupAllMembers = async () => {
     try {
       const getgrpmembersApi = await axios.get(
@@ -122,12 +92,20 @@ const Goupcontentchat = () => {
   const [gotoGroupProfile, setGotoGroupProfile] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full w-full">
       {/* Header */}
       <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
-            {selectedGroup?.groupname?.charAt(0)?.toUpperCase() || "U"}
+          <div className="flex gap-3 items-center">
+            <div
+              className="block md:hidden lg:hidden"
+              onClick={() => setSelectedGroup(null)}
+            >
+              <FaArrowLeft className="text-2xl text-white" />
+            </div>
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
+              {selectedGroup?.groupname?.charAt(0)?.toUpperCase() || "U"}
+            </div>
           </div>
 
           <div>
@@ -146,61 +124,13 @@ const Goupcontentchat = () => {
         </div>
 
         <div className="flex gap-10 items-center justify-center">
-          {searchmember && (
-            <div className="flex items-center gap-1">
-              <div className="flex items-center gap-3 bg-slate-800/70 backdrop-blur-md border border-slate-700 rounded-xl px-3 py-2 w-72 shadow-lg">
-                <IoSearchOutline
-                  className="text-gray-400 text-xl"
-                  onClick={() => setAddMemberModal(true)}
-                />
-
-                <input
-                  type="search"
-                  placeholder="Add members..."
-                  className="bg-transparent flex-1 text-white placeholder:text-gray-400 outline-none text-sm"
-                  value={searchData}
-                  onChange={(e) => {
-                    const value = e.target.value;
-
-                    setSearchData(value);
-                    if (value.trim()) {
-                      searchGroupUsers(value);
-                      setAddMemberModal(true);
-                    } else {
-                      setSearchUsers([]);
-                      setAddMemberModal(false);
-                    }
-                  }}
-                />
-              </div>
-              <button onClick={() => setSearchmember(false)}>
-                <MdClose className="text-blue-400 hover:scale-125 hover:text-red-600 transition duration-700 text-2xl " />
-              </button>
-            </div>
-          )}
-
-          <button
-            className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center "
-            onClick={() => setSearchmember(true)}
-          >
-            <IoPersonAddSharp className="text-green-500 text-lg hover:scale-125 transition duration-500 hover:text-green-600" />
-          </button>
           <div className="flex justify-center items-center gap-3">
-            <button className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center">
-              <BsThreeDotsVertical
-                className="text-slate-300 text-lg"
-                onClick={() => setGotoGroupProfile((prev) => !prev)}
-              />
+            <button
+              className=" p-1 bg-white text-black h-8 w-8 rounded-full flex justify-center items-center hover:text-white hover:bg-black"
+              onClick={() => navigate("/dashboard/groupchat/groupProfile")}
+            >
+              <FaArrowRight className="text-lg hover:scale-125 transition duration-700" />
             </button>
-
-            {gotoGroupProfile && (
-              <button
-                className=" p-1 bg-white text-black h-8 w-8 rounded-full flex justify-center items-center hover:text-white hover:bg-black"
-                onClick={() => navigate("/dashboard/groupchat/groupProfile")}
-              >
-                <FaArrowRight className="text-lg hover:scale-125 transition duration-700" />
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -208,12 +138,6 @@ const Goupcontentchat = () => {
       {/* Messages */}
 
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 bg-gray-900 relative">
-        {addMemberModal && (
-          <div className="absolute right-0 p-3">
-            <Groupmembermodal addmembertogroup={addmembertogroup} />
-          </div>
-        )}
-
         {groupmessages?.map((grpchat) => {
           const isOnline = onlineUsers.includes(grpchat.senderid?._id);
           return (

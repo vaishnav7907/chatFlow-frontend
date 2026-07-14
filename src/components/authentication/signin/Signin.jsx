@@ -60,7 +60,7 @@ const Signin = ({ tohome }) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="">
         <div>
           <div className="flex flex-col items-center">
@@ -70,10 +70,10 @@ const Signin = ({ tohome }) => {
             <h1 className="text-black font-semibold text-2xl">Welcome Back</h1>
           </div>
 
-          <div className="pt-7">
-            <form action="" onSubmit={submitt}>
-              <div className="flex flex-col gap-3 ">
-                <div>
+          <div className="pt-7 w-full">
+            <form action="" onSubmit={submitt} className="w-full pr-7 pl-7">
+              <div className="flex flex-col gap-3  w-full">
+                <div className="w-full">
                   <label htmlFor="" className="text-[#9794AA] ">
                     Email Address
                   </label>{" "}
@@ -81,13 +81,13 @@ const Signin = ({ tohome }) => {
                   <input
                     type="email"
                     placeholder="Enter your email address"
-                    className="h-9 border mt-1 border-gray-400 rounded-md w-96 pl-4 focus:border-bs-teal-400 focus:outline-0"
+                    className=" h-9 border mt-1 border-gray-400 rounded-md w-full pl-4 focus:border-bs-teal-400 focus:outline-0"
                     value={Email}
                     onChange={emailonchange}
                   />
                 </div>
 
-                <div>
+                <div className="w-full">
                   <label htmlFor="" className="text-[#9794AA]">
                     Password
                   </label>{" "}
@@ -95,13 +95,13 @@ const Signin = ({ tohome }) => {
                   <input
                     type="password"
                     placeholder="Enter your password "
-                    className="h-9 border mt-1 border-gray-400 rounded-md w-96 pl-4 focus:border-bs-teal-400 focus:outline-0"
+                    className="h-9 border mt-1 border-gray-400 rounded-md w-full pl-4 focus:border-bs-teal-400 focus:outline-0"
                     value={Password}
                     onChange={passwordonchange}
                   />
                 </div>
 
-                <div className="pt-7">
+                <div className="pt-7 w-full">
                   <button
                     className=" bg-gradient-to-r from-[#7C4DFF] via-[#6938EF] to-[#5B21B6] hover:from-[#8B5CF6] hover:via-[#7C3AED] hover:to-[#6D28D9] w-full h-12  rounded-2xl text-white"
                     type="submit"

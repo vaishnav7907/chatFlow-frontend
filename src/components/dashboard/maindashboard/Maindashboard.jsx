@@ -29,6 +29,7 @@ const Maindashboard = () => {
     <div className="h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
       <div className="flex h-full">
         {/* SIDEBAR */}
+        
         <div className="w-72 bg-[#10192C] pl-4 pr-4 pb-4 pt-1 border-r border-slate-700/50 flex flex-col">
           {/* LOGO */}
 

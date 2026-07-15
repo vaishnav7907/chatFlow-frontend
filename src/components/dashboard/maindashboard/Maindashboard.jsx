@@ -59,11 +59,25 @@ const Maindashboard = () => {
               </div>
 
               <div className="h-20  flex items-center">
-                <h1 className="font-serif italic tracking-wide
-               text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-  <span className="text-white">Chat</span>
-  <span className="text-white">Flow</span>
-</h1>
+                {/* <h1
+                  className="font-serif italic tracking-wide
+               text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+                >
+                  <span className="text-white">Chat</span>
+                  <span className="text-white">Flow</span>
+                </h1> */}
+
+                <h1
+                  className="font-serif italic tracking-wide
+               text-xl sm:text-2xl md:text-3xl lg:text-3xl"
+                >
+                  <span className="text-white">
+                    Chat
+                  </span>
+                  <span className="text-white">
+                    <span className="italic text-gray-400">f</span>low
+                  </span>
+                </h1>
               </div>
             </div>
 

@@ -105,7 +105,8 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-6 flex justify-center items-center w-full">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-10 flex flex-col items-center w-full overflow-y-auto">
+       <div className="min-h-screen w-full flex flex-col items-center justify-center py-8">
       <div className="w-full max-w-3xl rounded-3xl overflow-hidden border border-slate-700/40 bg-[#111827]/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3">
         <div>
           <div className="flex gap-7">
@@ -193,6 +194,47 @@ const EditProfile = () => {
             </button>
           </div>
         </div>
+      </div>
+
+
+      <div className="w-full max-w-3xl rounded-3xl overflow-hidden border border-slate-700/40 bg-[#111827]/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3 mt-3">
+        <div className="">
+          <div>
+            <h1 className="text-2xl font-bold text-white mb-6"> Chat Requests </h1>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-[#1B2438] rounded-2xl p-5 border border-slate-700 hover:border-green-500 transition">
+               <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">
+          Incoming Requests
+        </h3>
+
+        
+      </div>
+
+      <div className="text-slate-400 text-sm text-center py-8">
+        No incoming requests
+      </div>
+            </div>
+            <div className="bg-[#1B2438] rounded-2xl p-5 border border-slate-700 hover:border-blue-500 transition">
+               <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">
+          Outgoing Requests
+        </h3>
+
+        
+      </div>
+
+      <div className="text-slate-400 text-sm text-center py-8">
+        No outgoing requests
+      </div>
+            </div>
+          
+          </div>
+        </div>
+       
+      </div>
       </div>
     </div>
   );

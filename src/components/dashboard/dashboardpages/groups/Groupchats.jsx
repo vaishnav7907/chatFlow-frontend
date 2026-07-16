@@ -14,10 +14,12 @@ const Groupchats = () => {
   } = chatprovide();
 
   const groupgetfn = async () => {
-    
     try {
+      const token = localStorage.getItem("token");
+
       const getgroupapi = await axios.get(
         `${import.meta.env.VITE_API_URL}/ChatFlow/getgroup`,
+        { headers: { authorization: `Bearer ${token}` } },
       );
 
       setGetallgroups(getgroupapi.data);
@@ -60,7 +62,6 @@ const Groupchats = () => {
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg shadow-lg">
                 {getgrp?.groupname?.charAt(0)?.toUpperCase() || "U"}
               </div>
-              
             </div>
 
             <div className="flex-1">

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { chatprovide } from "../../../context/Chatprovider";
+import { TiUserAdd } from "react-icons/ti";
 
 const Contactchat = () => {
   const navigatee = useNavigate();
@@ -53,6 +54,23 @@ const Contactchat = () => {
     getallusers();
   }, []);
 
+  const sendRequest = async (recieverId) => {
+    try {
+      const requestapi = await axios.post(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/createRequest`,
+        { reciever: recieverId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      console.log("send request", requestapi.data);
+
+      alert(requestapi.data.status);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className=" w-full   flex flex-col gap-2">
       {allusers.map((user) => {
@@ -102,15 +120,20 @@ const Contactchat = () => {
 
             {/* User Info */}
             <div className="flex-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between ">
                 <h3 className="text-white font-semibold text-base">
                   {user.Username}
                 </h3>
 
-                <span className="text-xs text-gray-400">2 min</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sendRequest(user._id);
+                  }}
+                >
+                  <TiUserAdd className="text-white hover:text-green-400 text-2xl" />
+                </button>
               </div>
-
-              <p className="text-sm  text-gray-400">hey man</p>
             </div>
           </div>
         );

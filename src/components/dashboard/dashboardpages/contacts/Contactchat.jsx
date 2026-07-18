@@ -66,7 +66,7 @@ const Contactchat = () => {
 
       console.log("send request", requestapi.data);
 
-      alert(requestapi.data.status);
+      alert("request send successfully");
     } catch (error) {
       console.log(error);
     }

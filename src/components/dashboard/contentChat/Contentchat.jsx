@@ -1,5 +1,6 @@
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaMinusCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { chatprovide } from "../../context/Chatprovider";
 import { useState } from "react";
@@ -8,8 +9,7 @@ import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 const Contentchat = () => {
-
-const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const {
     selecteduser,
@@ -20,9 +20,10 @@ const navigate=useNavigate()
     sendmessage,
     currentuserid,
     onlineUsers,
-    setSelecteduser
+    setSelecteduser,
   } = chatprovide();
-  const isOnline = onlineUsers.includes(selecteduser._id);
+  // const isOnline = onlineUsers.includes(selecteduser._id);
+  const isOnline = onlineUsers.includes(selecteduser?._id);
   // console.log("message:");
 
   const submitMessage = async (e) => {
@@ -74,42 +75,75 @@ const navigate=useNavigate()
     }
   }, [selecteduser]);
 
+  const token = localStorage.getItem("token");
+
+  const deleteConnection = async (userid) => {
+    try {
+      const dltconnectionApi = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/deleteConnection/${userid}`,
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      console.log("dlt msg connection  :", dltconnectionApi.data);
+
+      alert("Connection deleted");
+      setSelecteduser(null);
+    } catch (error) {
+      console.log("dlt msg connection error:", error);
+    }
+  };
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <div className="h-20 px-6 flex items-center justify-between border-b border-slate-700/50">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3  ">
-
-            <div className="block md:hidden lg:hidden" onClick={()=>setSelecteduser(null)}>
-              <FaArrowLeft className="text-2xl text-white"/>
+      <div className="h-16 sm:h-20 px-3 sm:px-6 flex items-center justify-between border-b border-slate-700/50">
+        {/* Left Side */}
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div
+              className="block md:hidden"
+              onClick={() => setSelecteduser(null)}
+            >
+              <FaArrowLeft className="text-xl sm:text-2xl text-white cursor-pointer" />
             </div>
 
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white font-bold text-sm sm:text-base flex-shrink-0">
               {selecteduser?.Username?.charAt(0)?.toUpperCase() || "U"}
             </div>
           </div>
-          <div>
-            <h3 className="text-white font-semibold text-lg">
+
+          <div className="min-w-0">
+            <h3 className="text-white font-semibold text-sm sm:text-lg truncate">
               {selecteduser?.Username || "Select User"}
             </h3>
 
             <div className="flex items-center gap-2">
               <span
-                className={`w-3 h-3 rounded-full ${
-                  isOnline ? "bg-green-500" : "bg-gray-900"
+                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${
+                  isOnline ? "bg-green-500" : "bg-gray-500"
                 }`}
               ></span>
 
-              <p className="text-xs text-slate-400">
+              <p className="text-[10px] sm:text-xs text-slate-400">
                 {isOnline ? "Online" : "Offline"}
               </p>
             </div>
           </div>
         </div>
 
-        <button className="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center">
-          <BsThreeDotsVertical className="text-slate-300 text-lg" />
+        {/* Delete Button */}
+        <button
+          className="flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 text-xs sm:text-sm whitespace-nowrap flex-shrink-0"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (selecteduser?._id) {
+              deleteConnection(selecteduser._id);
+            }
+          }}
+        >
+          <FaMinusCircle className="text-sm sm:text-base" />
+          <span className="hidden xs:inline sm:inline">Delete</span>
         </button>
       </div>
 

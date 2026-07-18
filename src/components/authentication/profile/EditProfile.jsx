@@ -164,7 +164,7 @@ const EditProfile = () => {
       );
       console.log(acceptrequestApi.data);
       //refresh both requests
-      // setInrequests((prev) =>    
+      // setInrequests((prev) =>
       //   prev.map((req) =>
       //     req._id === requestid
       //       ? { ...req, status: acceptrequestApi.data.status || "accepted" }
@@ -175,6 +175,24 @@ const EditProfile = () => {
       await outgoingRequest();
     } catch (error) {
       console.log("accept request  error:", error);
+    }
+  };
+
+  const rejectRequests = async (requestid) => {
+    try {
+      const rejectrequestApi = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/rejectRequest/${requestid}`,
+        {}, //empty object used for . here we using patch ,so patch (url,body,headers). here without using empty object. the header portion changed to "data" instead of empty object.
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      console.log("reject request :", rejectrequestApi.data);
+      await incomingRequests(); //refresh both lists
+      await outgoingRequest();
+      alert("request rejected");
+    } catch (error) {
+      console.log("reject request error:", error);
     }
   };
   return (
@@ -323,11 +341,9 @@ const EditProfile = () => {
                         <h3 className="text-white font-semibold text-base">
                           {incomingdata.sender?.Username}
                         </h3>
-                        
-                          {/* <button>
-                            <FaMinusCircle className="text-lg  text-red-400" />
-                          </button> */}
-                       
+                        <div className="flex items-center gap-2">
+                          
+
                           <button
                             className="p-1"
                             onClick={(e) => {
@@ -337,7 +353,16 @@ const EditProfile = () => {
                           >
                             <FaHandshakeSimple className="text-2xl text-white hover:text-cyan-300 transition-colors duration-300" />
                           </button>
-                       
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              rejectRequests(incomingdata._id);
+                            }}
+                          >
+                            <FaMinusCircle className="text-lg  text-red-400" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -390,7 +415,13 @@ const EditProfile = () => {
                           {outgoingdata.reciever?.Username}
                         </h3>
 
-                        <button className="p-1">
+                        <button
+                          className="p-1"
+                          // onClick={(e) => {
+                          //   e.stopPropagation();
+                          //   rejectRequests(outgoingdata._id);
+                          // }}
+                        >
                           <CiSquareMinus className="text-2xl text-white hover:text-red-600 transition-colors duration-300" />
                         </button>
                       </div>

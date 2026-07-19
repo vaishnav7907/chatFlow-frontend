@@ -89,6 +89,7 @@ const EditProfile = () => {
           },
         },
       );
+
       console.log(updateProfileApi.data);
       alert(updateProfileApi.data.message);
     } catch (error) {
@@ -195,8 +196,26 @@ const EditProfile = () => {
       console.log("reject request error:", error);
     }
   };
+
+  const rejectOutgoingReq = async (requestid) => {
+    try {
+      const rejectOutgoingapi = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/cancelOutgoingReq/${requestid}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      console.log("reject outgoing request", rejectOutgoingapi.data);
+      await outgoingRequest();
+      alert(" outgoing request rejected");
+    } catch (error) {}
+  };
+
+  const [showAllIncoming, setShowAllIncoming] = useState(false);
+  const [showAllOutgoing, setShowAllOutgoing] = useState(false);
+  const visibleIncoming = showAllIncoming ? inrequests : inrequests.slice(0, 3);
+
+  const visibleOutgoing = showAllOutgoing ? outRequest : outRequest.slice(0, 3);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-10 flex flex-col items-center w-full overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B1120] via-[#111827] to-[#0F172A] p-2 flex flex-col items-center w-full overflow-y-auto">
       <div className="min-h-screen w-full flex flex-col items-center justify-center py-8">
         <div className="w-full max-w-3xl rounded-3xl overflow-hidden border border-slate-700/40 bg-[#111827]/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3">
           <div>
@@ -299,9 +318,9 @@ const EditProfile = () => {
               </h1>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 grid-rows-2 sm: md:grid-cols-2 md:grid-rows-1 lg:grid-cols-2 lg:grid-rows-1 gap-4">
               <div className="bg-[#1B2438] rounded-2xl p-5 border border-slate-700 hover:border-green-500 transition">
-                <div className=" mb-4">
+                <div className="mb-4">
                   <h3 className="text-lg font-semibold text-white">
                     Incoming Requests
                   </h3>
@@ -312,60 +331,72 @@ const EditProfile = () => {
                     No incoming requests found
                   </div>
                 ) : (
-                  inrequests.map((incomingdata) => (
-                    <div
-                      className=" mt-1 flex items-center gap-2 p-3 rounded-2xl bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-green-800 hover:bg-[#1a2440] transition-all duration-300 cursor-pointer group"
-                      key={incomingdata._id}
-                    >
-                      {/* Avatar */}
-                      <div className="">
-                        <div className="w-10 h-10 rounded-full overflow-hidden">
-                          {incomingdata.sender?.ProfileImage ? (
-                            <img
-                              src={incomingdata.sender?.ProfileImage}
-                              alt="loading"
-                              className="w-full h-full object-cover rounded-full"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
-                              {incomingdata.sender?.Username?.charAt(
-                                0,
-                              ).toUpperCase()}
-                            </div>
-                          )}
+                  <>
+                    {visibleIncoming.map((incomingdata) => (
+                      <div
+                        key={incomingdata._id}
+                        className="mt-1 flex items-center gap-2 p-3 rounded-2xl bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-green-800 hover:bg-[#1a2440] transition-all duration-300 cursor-pointer group"
+                      >
+                        {/* Avatar */}
+                        <div>
+                          <div className="w-10 h-10 rounded-full overflow-hidden">
+                            {incomingdata.sender?.ProfileImage ? (
+                              <img
+                                src={incomingdata.sender.ProfileImage}
+                                alt="loading"
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
+                                {incomingdata.sender?.Username?.charAt(
+                                  0,
+                                ).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* User Info */}
+                        <div className="flex-1 flex items-center justify-between flex-wrap">
+                          <h3 className="text-white font-semibold text-base">
+                            {incomingdata.sender?.Username}
+                          </h3>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              className="p-1"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                acceptRequest(incomingdata._id);
+                              }}
+                            >
+                              <FaHandshakeSimple className="text-2xl text-white hover:text-cyan-300 transition-colors duration-300" />
+                            </button>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                rejectRequests(incomingdata._id);
+                              }}
+                            >
+                              <FaMinusCircle className="text-lg text-red-400" />
+                            </button>
+                          </div>
                         </div>
                       </div>
+                    ))}
 
-                      {/* User Info */}
-                      <div className="flex-1 flex items-center justify-between">
-                        <h3 className="text-white font-semibold text-base">
-                          {incomingdata.sender?.Username}
-                        </h3>
-                        <div className="flex items-center gap-2">
-                          
-
-                          <button
-                            className="p-1"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              acceptRequest(incomingdata._id);
-                            }}
-                          >
-                            <FaHandshakeSimple className="text-2xl text-white hover:text-cyan-300 transition-colors duration-300" />
-                          </button>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              rejectRequests(incomingdata._id);
-                            }}
-                          >
-                            <FaMinusCircle className="text-lg  text-red-400" />
-                          </button>
-                        </div>
+                    {inrequests.length > 3 && (
+                      <div className="flex justify-center mt-4">
+                        <button
+                          onClick={() => setShowAllIncoming(!showAllIncoming)}
+                          className="text-cyan-400 hover:text-cyan-300 font-medium transition"
+                        >
+                          {showAllIncoming ? "See Less" : "See More"}
+                        </button>
                       </div>
-                    </div>
-                  ))
+                    )}
+                  </>
                 )}
               </div>
 
@@ -385,48 +416,66 @@ const EditProfile = () => {
                     No outgoing requests found
                   </div>
                 ) : (
-                  outRequest.map((outgoingdata) => (
-                    <div
-                      className=" mt-1 flex items-center gap-2 p-3 rounded-2xl bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-green-800 hover:bg-[#1a2440] transition-all duration-300 cursor-pointer group"
-                      key={outgoingdata._id}
-                    >
-                      {/* Avatar */}
-                      <div className="">
-                        <div className="w-10 h-10 rounded-full overflow-hidden">
-                          {outgoingdata.reciever?.ProfileImage ? (
-                            <img
-                              src={outgoingdata.reciever?.ProfileImage}
-                              alt="loading"
-                              className="w-full h-full object-cover rounded-full"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
-                              {outgoingdata.reciever?.Username?.charAt(
-                                0,
-                              ).toUpperCase()}
-                            </div>
-                          )}
+                  <>
+                    {visibleOutgoing.map((outgoingdata) => (
+                      <div
+                        key={outgoingdata._id}
+                        className="mt-1 flex items-center gap-2 p-3 rounded-2xl bg-[#131c31]/70 backdrop-blur-sm border border-slate-800 hover:border-green-800 hover:bg-[#1a2440] transition-all duration-300 cursor-pointer group"
+                      >
+                        <div>
+                          <div className="w-10 h-10 rounded-full overflow-hidden">
+                            {outgoingdata.reciever?.ProfileImage ? (
+                              <img
+                                src={outgoingdata.reciever.ProfileImage}
+                                alt="loading"
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-[#6938EF] to-[#8B5CF6] flex items-center justify-center text-white font-bold text-lg">
+                                {outgoingdata.reciever?.Username?.charAt(
+                                  0,
+                                ).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* User Info */}
+                        <div className="flex-1 flex items-center justify-between">
+                          <h3 className="text-white font-semibold text-base">
+                            {outgoingdata.reciever?.Username}
+                          </h3>
+
+                          <div>
+                            <button
+                              className="text-red-500 text-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                console.log(
+                                  "Outgoing clicked",
+                                  outgoingdata._id,
+                                );
+                                rejectOutgoingReq(outgoingdata._id);
+                              }}
+                            >
+                              <CiSquareMinus />
+                            </button>
+                          </div>
                         </div>
                       </div>
+                    ))}
 
-                      {/* User Info */}
-                      <div className="flex-1 flex items-center justify-between">
-                        <h3 className="text-white font-semibold text-base">
-                          {outgoingdata.reciever?.Username}
-                        </h3>
-
+                    {outRequest.length > 3 && (
+                      <div className="flex justify-center mt-4">
                         <button
-                          className="p-1"
-                          // onClick={(e) => {
-                          //   e.stopPropagation();
-                          //   rejectRequests(outgoingdata._id);
-                          // }}
+                          onClick={() => setShowAllOutgoing(!showAllOutgoing)}
+                          className="text-cyan-400 hover:text-cyan-300 font-medium transition"
                         >
-                          <CiSquareMinus className="text-2xl text-white hover:text-red-600 transition-colors duration-300" />
+                          {showAllOutgoing ? "See Less" : "See More"}
                         </button>
                       </div>
-                    </div>
-                  ))
+                    )}
+                  </>
                 )}
               </div>
             </div>

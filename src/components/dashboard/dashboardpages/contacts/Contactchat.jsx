@@ -23,6 +23,7 @@ const Contactchat = () => {
     onlineUsers,
     ProfileImage,
     preview,
+    sendRequest
   } = chatprovide();
 
   const getallusers = async () => {
@@ -54,23 +55,7 @@ const Contactchat = () => {
     getallusers();
   }, []);
 
-  const sendRequest = async (recieverId) => {
-    try {
-      const requestapi = await axios.post(
-        `${import.meta.env.VITE_API_URL}/ChatFlow/createRequest`,
-        { reciever: recieverId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      console.log("send request", requestapi.data);
-
-      alert("request send successfully");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   
   return (

@@ -11,6 +11,7 @@ import ChatArea from "../contentChat/ChatArea";
 import { IoSettingsOutline } from "react-icons/io5";
 import { chatprovide } from "../../context/Chatprovider";
 import { IoIosLogOut } from "react-icons/io";
+import { TiUserAdd } from "react-icons/ti";
 import axios from "axios";
 const Maindashboard = () => {
   const {
@@ -26,6 +27,8 @@ const Maindashboard = () => {
     searchConnections,
     setSearchConnections,
     searchContacts,
+    sendRequest,
+    setSelecteduser,
   } = chatprovide();
   const isChatOpen = selecteduser || selectedGroup;
 
@@ -119,21 +122,41 @@ const Maindashboard = () => {
                     searchConnections.map((user) => (
                       <div
                         key={user._id}
-                        className="flex items-center gap-4 p-2 rounded-2xl bg-[#131c31]/70 hover:bg-[#1a2440] cursor-pointer"
+                        onClick={(e) => {
+                           
+                            setSelecteduser(user);
+                          }}
+                        className="flex items-center justify-between p-2 rounded-2xl bg-[#131c31]/70 hover:bg-[#1a2440] cursor-pointer"
                       >
-                        <div className="w-10 h-10 rounded-full overflow-hidden">
-                          {user.ProfileImage ? (
-                            <img
-                              src={user.ProfileImage}
-                              alt={user.Username}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <IoMdContact className="w-full h-full text-white" />
-                          )}
+                        <div
+                          className="flex items-center gap-2"
+                          
+                        >
+                          <div className="w-10 h-10 rounded-full overflow-hidden">
+                            {user.ProfileImage ? (
+                              <img
+                                src={user.ProfileImage}
+                                alt={user.Username}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <IoMdContact className="w-full h-full text-white" />
+                            )}
+                          </div>
+
+                          <h3 className="text-white">{user.Username}</h3>
                         </div>
 
-                        <h3 className="text-white">{user.Username}</h3>
+                        <div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              sendRequest(user._id);
+                            }}
+                          >
+                            <TiUserAdd className="text-white hover:text-green-400 text-2xl" />
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}

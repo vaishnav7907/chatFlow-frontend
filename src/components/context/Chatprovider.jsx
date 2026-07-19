@@ -351,6 +351,26 @@ export const Chatprovider = ({ children }) => {
       console.log("Search contacts error:", error);
     }
   };
+
+
+  //send request
+  const sendRequest = async (recieverId) => {
+    try {
+      const requestapi = await axios.post(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/createRequest`,
+        { reciever: recieverId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      console.log("send request", requestapi.data);
+
+      alert("request send successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ChatContext.Provider
       value={{
@@ -442,6 +462,8 @@ export const Chatprovider = ({ children }) => {
 
         searchText,
         setSearchText,
+
+        sendRequest
       }}
     >
       {children}

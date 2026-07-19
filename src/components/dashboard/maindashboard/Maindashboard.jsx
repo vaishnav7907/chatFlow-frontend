@@ -1,6 +1,6 @@
 // Maindashboard.jsx
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import Chatsidebar from "../chatsidebar/Chatsidebar";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import ChatArea from "../contentChat/ChatArea";
 import { IoSettingsOutline } from "react-icons/io5";
 import { chatprovide } from "../../context/Chatprovider";
 import { IoIosLogOut } from "react-icons/io";
+import axios from "axios";
 const Maindashboard = () => {
   const {
     ProfileImage,
@@ -20,6 +21,11 @@ const Maindashboard = () => {
     getprofilepic,
     selecteduser,
     selectedGroup,
+    searchText,
+    setSearchText,
+    searchConnections,
+    setSearchConnections,
+    searchContacts,
   } = chatprovide();
   const isChatOpen = selecteduser || selectedGroup;
 
@@ -71,9 +77,7 @@ const Maindashboard = () => {
                   className="font-serif italic tracking-wide
                text-xl sm:text-2xl md:text-3xl lg:text-3xl"
                 >
-                  <span className="text-white">
-                    Chat
-                  </span>
+                  <span className="text-white">Chat</span>
                   <span className="text-white">
                     <span className="italic text-gray-400">f</span>low
                   </span>
@@ -86,7 +90,12 @@ const Maindashboard = () => {
               <input
                 type="text"
                 placeholder="search conversation..."
-                className="w-full border border-slate-700/50 focus:border-purple-500 outline-none rounded-md p-2 pl-10 text-white bg-transparent"
+                className=" flex-1  w-full border border-slate-700/50 focus:border-purple-500 outline-none rounded-md p-2 pl-10 text-white bg-transparent"
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  searchContacts(e.target.value);
+                }}
               />
 
               <GoSearch className="absolute left-3 top-7 text-slate-500 text-xl" />
@@ -100,7 +109,38 @@ const Maindashboard = () => {
             {/* CHAT CONTENT */}
 
             <div className="flex-1 min-h-0 pt-4 overflow-y-auto border-t border-slate-700/50 scrollbar-none">
-              <Outlet />
+              {searchText ? (
+                <div className="space-y-2">
+                  {searchConnections.length === 0 ? (
+                    <p className="text-center text-gray-400 mt-5">
+                      No users found
+                    </p>
+                  ) : (
+                    searchConnections.map((user) => (
+                      <div
+                        key={user._id}
+                        className="flex items-center gap-4 p-2 rounded-2xl bg-[#131c31]/70 hover:bg-[#1a2440] cursor-pointer"
+                      >
+                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                          {user.ProfileImage ? (
+                            <img
+                              src={user.ProfileImage}
+                              alt={user.Username}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <IoMdContact className="w-full h-full text-white" />
+                          )}
+                        </div>
+
+                        <h3 className="text-white">{user.Username}</h3>
+                      </div>
+                    ))
+                  )}
+                </div>
+              ) : (
+                <Outlet />
+              )}
             </div>
           </div>
 

@@ -321,6 +321,36 @@ export const Chatprovider = ({ children }) => {
     }
   }, [currentuserid]);
 
+  // search contacts
+
+  const [searchText, setSearchText] = useState("");
+  const [searchConnections, setSearchConnections] = useState([]);
+  const searchContacts = async (value) => {
+    // if (!value.trim()) {
+    //   setSearchConnections([]);
+    //   return;
+    // }
+
+    console.log("value",value);
+    
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/ChatFlow/searchContacts`,
+        {
+          params: {
+            search: value,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      console.log("search contacts", response.data);
+      setSearchConnections(response.data);
+    } catch (error) {
+      console.log("Search contacts error:", error);
+    }
+  };
   return (
     <ChatContext.Provider
       value={{
@@ -404,6 +434,14 @@ export const Chatprovider = ({ children }) => {
         setProfileImage,
 
         getprofilepic,
+
+        searchContacts,
+
+        searchConnections,
+        setSearchConnections,
+
+        searchText,
+        setSearchText,
       }}
     >
       {children}

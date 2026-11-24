@@ -46,19 +46,20 @@ function App() {
                 isauth ? <Maindashboard /> : <Navigate to={"/authentication"} />
               }
             > */}
-            <Route element={<ProtectRouter isauth={isauth}/> }>
+            <Route element={<ProtectRouter isauth={isauth} />}>
+              <Route path="/dashboard" element={<Maindashboard />}>
+                <Route index element={<Allchats />} />
+                <Route path="groupchat" element={<Groupchats />} />
+                <Route path="contactchats" element={<Contactchat />} />
+              </Route>
 
-            <Route path="/dashboard" element={<Maindashboard/>} >
-              <Route index element={<Allchats />} />
-              <Route path="groupchat" element={<Groupchats />} />
-              <Route path="contactchats" element={<Contactchat />} />
-            </Route>
-
-           
               {/* <Route path="/dashboard/chatbar" element={<Chatsidebar />} /> */}
-              <Route path="/dashboard/groupchat/groupProfile" element={<GroupProfile />} />
+              <Route
+                path="/dashboard/groupchat/groupProfile"
+                element={<GroupProfile />}
+              />
               <Route path="/dashboard/profile" element={<EditProfile />} />
-           </Route>
+            </Route>
           </Routes>
         </BrowserRouter>
       </Chatprovider>

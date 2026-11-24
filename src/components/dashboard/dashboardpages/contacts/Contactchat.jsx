@@ -11,9 +11,9 @@ const Contactchat = () => {
 
   const myid = localStorage.getItem("userId");
 
-  const token = localStorage.getItem("token");
+ 
 
-  console.log("token:", token);
+  
 
   const {
     allusers,
@@ -28,6 +28,8 @@ const Contactchat = () => {
 
   const getallusers = async () => {
     try {
+       const token = localStorage.getItem("token");
+       console.log("token:", token);
       const allusersapi = await axios.get(
         `${import.meta.env.VITE_API_URL}/ChatFlow/getallusers`,
         {

@@ -9,7 +9,7 @@ const Signup = ({ todashboard }) => {
   // const [Username, setUsername] = useState("");
   // const [Password, setPassword] = useState("");
 
-  const { Email, setEmail, Username, setUsername, Password, setPassword,connectSocket } =chatprovide();
+  const { Email, setEmail, Username, setUsername, Password, setPassword,connectSocket } = chatprovide();
 
   const emailonchange = (e) => {
     setEmail(e.target.value);
